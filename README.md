@@ -15,4 +15,4 @@ Zelalem Habtamu  | UGR/7301/13 | 01
 
 **xTour** also provides an opportunity for Users to be *"Journalists"* after validation by the Admin and they can start posting their journals via website links. The journals created will be available to other users after getting approved by the Admin.
 
---The Admin makes sure of the smooth running of the application for the users by making it a safe space for sharing their experiences and authorizing the users for the maintenance of users privacy and security. This is achieved by pending posts and journals made by the user for approval before making them available to other users.
+The Admin makes sure of the smooth running of the application for the users by making it a safe space for sharing their experiences and authorizing the users for the maintenance of users privacy and security. This is achieved by pending posts and journals made by the user for approval before making them available to other users.
