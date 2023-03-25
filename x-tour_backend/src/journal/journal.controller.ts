@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Param, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post, Param, Query, Patch, Delete } from '@nestjs/common';
 import { CreateJournalDto } from './Dtos/create_journal.dto';
 import { QueryStringDto } from './Dtos/query.dto';
 import { JournalService } from './journal.service';
@@ -24,7 +24,7 @@ export class JournalController {
         return await this.journalService.getPendingJournal(id);
     }
 
-    @Get(':/id')
+    @Get('/:id')
     async getApprovedJournal(@Param('id') id: string){
         return await this.journalService.getApprovedJournal(id);
     }
@@ -37,6 +37,26 @@ export class JournalController {
     @Post('Pending')
     async createJournal(@Body() body: CreateJournalDto){
         return await this.journalService.createJournal(body);
+    }
+
+    @Patch('pending/:id')
+    async updatePendingJournal(@Param("id") id: string, @Body() body){
+        return await this.journalService.updatePendingJournal(id, body);
+    }
+
+    @Patch('/:id')
+    async updateApprovedJournal(@Param("id") id: string, @Body() body){
+        return await this.journalService.updateApprovedJournal(id, body);
+    }
+
+    @Delete('pending/:id')
+    async deletePendingJournal(@Param("id") id: string){
+        return this.journalService.deletePendingJournal(id);
+    }
+
+    @Delete('/:id')
+    async deleteApprovedJournal(@Param("id") id: string){
+        return this.journalService.deleteApprovedJournal(id);
     }
 
 }
