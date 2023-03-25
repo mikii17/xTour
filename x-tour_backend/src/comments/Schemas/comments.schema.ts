@@ -13,3 +13,5 @@ export class Comments{
     @Prop({ref:"Users", type:[mongoose.Schema.Types.ObjectId]})
     replies:mongoose.Schema.Types.ObjectId[];
 }
+
+export const CommentSchema = SchemaFactory.createForClass(Comments);
