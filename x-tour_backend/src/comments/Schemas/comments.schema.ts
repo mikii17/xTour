@@ -4,14 +4,14 @@ import * as mongoose from 'mongoose';
 
 @Schema()
 export class Comments{
-    @Prop({required: true})
-    _id: String;
+    @Prop({required: true,ref:"Users", type:[mongoose.Schema.Types.ObjectId]})
+    commenter: mongoose.Schema.Types.ObjectId[];
 
     @Prop()
     message:String;
 
-    @Prop({ref:"Users", type:[mongoose.Schema.Types.ObjectId]})
-    replies:mongoose.Schema.Types.ObjectId[];
+    @Prop()
+    replies:String[];
 }
 
 export const CommentSchema = SchemaFactory.createForClass(Comments);
