@@ -1,11 +1,15 @@
-import { IsNotEmpty } from "class-validator";
+import { IsNotEmpty, IsString } from "class-validator";
 import mongoose from "mongoose";
 export class CreateCommentDto {
+    @IsNotEmpty()
+    commenterId: String;
 
-    commenter: mongoose.Schema.Types.ObjectId;
+    replyId:String;
+
+    postId: String;
 
     @IsNotEmpty()
+    @IsString()
     message: String;
 
-    replies: String[]
 }

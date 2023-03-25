@@ -1,26 +1,56 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
+import {InjectModel} from '@nestjs/mongoose';
+import { CommentSchema, Comments } from './Schemas/comments.schema';
+import {Model} from 'mongoose'
 
 @Injectable()
 export class CommentsService {
-  create(createCommentDto: CreateCommentDto) {
-    return 'This action adds a new comment';
+  constructor(
+    @InjectModel("Comments") private readonly commentsModel: Model<Comments>
+  ){}
+  async createComment(createCommentDto: CreateCommentDto) {
+   const {commenterId,replyId, postId, message} = createCommentDto;
+   const comment = await this.commentsModel.create({commenterId,replyId, postId, message});
+  //  const commentId = comment.commenterId;
+  //  await this.userService.addCourse(id, commentID);
+  return comment;
   }
 
-  findAll() {
-    return `This action returns all comments`;
+
+
+  
+  async getReply(replyId:String){
+    const replies = await this.commentsModel.find({replyId:replyId});
+    if(!replies) throw new NotFoundException("replies not found");
+    return replies;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} comment`;
+  async getComment(postId:String){
+    const comments = await this.commentsModel.find({postId: postId});
+    if(!comments) throw new NotFoundException("comments not found");
+    return comments;
   }
 
-  update(id: number, updateCommentDto: UpdateCommentDto) {
-    return `This action updates a #${id} comment`;
+  // findAll() {
+  //   return `This action returns all comments`;
+  // }
+
+  async findOne(id: String) {
+    console.log(id);
+    const comment = (await this.commentsModel.findById(id));
+    
+    if(!comment) throw new NotFoundException('Course Not Found');
+    return comment.message;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} comment`;
+  async update(id:String, updateComment: UpdateCommentDto) {
+    
+    return await this.commentsModel.findByIdAndUpdate(id, updateComment);
+  }
+
+  async remove(id: String) {
+    return await this.commentsModel.findByIdAndDelete(id);
   }
 }
