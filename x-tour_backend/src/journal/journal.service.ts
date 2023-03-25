@@ -2,6 +2,7 @@ import { DynamicModule, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose/dist';
 import { Model } from 'mongoose';
 import { CreateJournalDto } from './Dtos/create_journal.dto';
+import { QueryStringDto } from './Dtos/query.dto';
 import { Journal } from './Schemas/journal.schema';
 import { JournalPending } from './Schemas/journal_pending.schema';
 
@@ -20,7 +21,8 @@ export class JournalService {
         return await model.findById(id);
     }
 
-    async getJournals(model: any, search = "" ,perPage = 20, page = 1){
+    async getJournals(model, queryString: QueryStringDto){
+        const {search="", perPage=20, page=1} = queryString;
         const skip = perPage * (page - 1);
         const journals = await model.find({ titile: { $regex: search, $options: "i" }}).limit(perPage).skip(skip);
         const journalsCount = await model.count({ titile: { $regex: search, $options: "i" }});
@@ -48,8 +50,8 @@ export class JournalService {
         return await this.getJournal(this.journalPendingModel, id);
     }
 
-    async getPendingJournals(search = "" ,perPage = 20, page = 1){
-        return await this.getJournals(this.journalPendingModel, search, perPage, page);
+    async getPendingJournals(queryString: QueryStringDto){
+        return await this.getJournals(this.journalPendingModel, queryString);
     }
     async updatePendingJournal(id: string, journal) {
         return await this.updateJournal(this.journalPendingModel,id, journal);    
@@ -70,8 +72,8 @@ export class JournalService {
         return await this.getJournal(this.journalModel, id);
     }
 
-    async getApprovedJournals(search = "" ,perPage = 20, page = 1){
-        return await this.getJournals(this.journalModel, search, perPage, page);
+    async getApprovedJournals(queryString: QueryStringDto){
+        return await this.getJournals(this.journalModel, queryString);
     }
  
     async insertImageOnApproved(id: string, image_url: string){
