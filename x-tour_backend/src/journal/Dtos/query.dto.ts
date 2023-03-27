@@ -1,5 +1,5 @@
-export class QueryStringDto{
-    search: string;
-    perPage: number;
-    page: number;
+export class QueryStringDto {
+  search: string;
+  perPage: number;
+  page: number;
 }
