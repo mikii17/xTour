@@ -3,7 +3,8 @@ import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import {InjectModel} from '@nestjs/mongoose';
 import { CommentSchema, Comments } from './Schemas/comments.schema';
-import {Model} from 'mongoose'
+import {Model} from 'mongoose';
+// import {paginate} from 'nestjs-paginate';
 
 @Injectable()
 export class CommentsService {
@@ -21,9 +22,13 @@ export class CommentsService {
 
 
   
-  async getReply(replyId:String){
-    const replies = await this.commentsModel.find({replyId:replyId});
+  async getReply(replyId:String,page:number){
+
+    const pages:number = parseInt(page as any) || 1;
+    const limit = 3;
+    const replies = await this.commentsModel.find({replyId:replyId}).skip((pages -1)*limit).limit(limit).exec();
     if(!replies) throw new NotFoundException("replies not found");
+   
     return replies;
   }
 

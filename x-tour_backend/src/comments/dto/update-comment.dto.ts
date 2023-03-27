@@ -8,6 +8,6 @@ export class UpdateCommentDto extends PartialType(CreateCommentDto) {
     replyId:String;
 
     postId: String;
-
+ 
     message: String;
 }

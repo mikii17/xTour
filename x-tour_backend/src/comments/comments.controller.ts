@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
+import { getReplyDto } from './dto/getReply.dto';
 
 
 @Controller('comments')
@@ -28,8 +29,9 @@ export class CommentsController {
     return await this.commentsService.getComment(postId);
   }
   @Get('replies/:replyId')
-  async getReply(@Param('replyId') replyId: String){
-    return await this.commentsService.getReply(replyId);
+  async getReply(@Param() params:getReplyDto){
+    const {replyId, page} = params;
+    return await this.commentsService.getReply(replyId,page);
 
   }
 
