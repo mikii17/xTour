@@ -25,7 +25,7 @@ export class CommentsService {
   async getReply(replyId:String,page:number){
 
     const pages:number = parseInt(page as any) || 1;
-    const limit = 3;
+    const limit = 5;
     const replies = await this.commentsModel.find({replyId:replyId}).skip((pages -1)*limit).limit(limit).exec();
     if(!replies) throw new NotFoundException("replies not found");
    
@@ -38,9 +38,7 @@ export class CommentsService {
     return comments;
   }
 
-  // findAll() {
-  //   return `This action returns all comments`;
-  // }
+
 
   async findOne(id: String) {
     console.log(id);
