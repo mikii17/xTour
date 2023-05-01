@@ -4,7 +4,7 @@ import { UpdateCommentDto } from './dto/update-comment.dto';
 import {InjectModel} from '@nestjs/mongoose';
 import { CommentSchema, Comments } from './Schemas/comments.schema';
 import {Model} from 'mongoose';
-// import {paginate} from 'nestjs-paginate';
+
 
 @Injectable()
 export class CommentsService {
@@ -14,8 +14,7 @@ export class CommentsService {
   async createComment(createCommentDto: CreateCommentDto) {
    const {commenterId,replyId, postId, message} = createCommentDto;
    const comment = await this.commentsModel.create({commenterId,replyId, postId, message});
-  //  const commentId = comment.commenterId;
-  //  await this.userService.addCourse(id, commentID);
+
   return comment;
   }
 
