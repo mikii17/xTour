@@ -32,6 +32,7 @@ export class User{
 
     @Prop()
     role: Role[];
+    
 }
 
 export const userSchema=SchemaFactory.createForClass(User);
