@@ -41,7 +41,7 @@ export class CommentsService {
 
 
   async findOne(id: String) {
-    console.log(id);
+    
     const comment = (await this.commentsModel.findById(id));
     
     if(!comment) throw new NotFoundException('Course Not Found');
