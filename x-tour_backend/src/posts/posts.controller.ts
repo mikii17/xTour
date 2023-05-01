@@ -84,4 +84,60 @@ export class PostsController {
   }
 
   // end points for the pending posts////////////////////////////////////////////////////////////////
+  @Post('pending')
+  @UsePipes(new ValidationPipe({ transform: true }))
+  createPending(
+    @Body() createPostDto: CreatePostDto
+  ){
+    console.log(createPostDto)
+    return this.postsService.createPending(createPostDto);
+  }
+  
+  @Post('pending/images/:id')
+  @UseInterceptors(FilesInterceptor('files', 3, {
+
+    storage: diskStorage({
+      destination: './images/pending',
+      filename(req, file, callback){
+        callback(null, `${Date.now()}-${file.originalname}`)
+      }
+    })
+  }))
+
+  creatependingImages(
+    @Param('id') id: string,
+    @UploadedFiles() files: Array<Express.Multer.File>
+  ){
+
+    const images = [];
+    files.forEach((file) => {
+      images.push({
+        originalName: file.originalname,
+        newName: file.filename,
+      });
+    });
+    return this.postsService.insertPendingImages(images, id);
+  }
+  
+  @Get('pending')
+  async findAllpending() {
+    const posts = await this.postsService.findAllPendings();
+    return posts
+  }
+
+  @Patch('pending/:id')
+  async updatePending(
+    @Param('id') postId: string, 
+    @Body('story') story: string,
+    @Body('discription') disc: string,
+    ) {
+    const result = await this.postsService.updatePending(postId, story, disc);
+    return result
+  }
+
+  @Delete('pending:id')
+  async deletePending(@Param('id') id: string){
+    console.log('delete')
+    return await this.postsService.removePending(id);
+  }
 }
