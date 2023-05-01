@@ -17,6 +17,7 @@ export class Journal {
 
   @Prop()
   description: string;
+  
 }
 
 export const JournalSchema = SchemaFactory.createForClass(Journal);
