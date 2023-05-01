@@ -54,6 +54,14 @@ export class CommentsService {
   }
 
   async remove(id: String) {
-    return await this.commentsModel.findByIdAndDelete(id);
+    const comment = await this.commentsModel.findById(id);
+    
+    if(!comment){
+      throw new NotFoundException('Comment not found');
+    }
+
+    await this.commentsModel.findByIdAndDelete(id);
+
+    await this.commentsModel.deleteMany({replyId: id});
   }
 }
