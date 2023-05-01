@@ -7,6 +7,9 @@ import { AuthModule } from './auth/auth.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { JournalModule } from './journal/journal.module';
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from './auth/guard/roles.guard';
+
 @Module({
   imports: [
     MongooseModule.forRoot('mongodb://127.0.0.1:27017/xTour', {
@@ -23,10 +26,13 @@ import { JournalModule } from './journal/journal.module';
       rootPath: join(__dirname, '..', 'images', 'users'),
     }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'images', 'segami'),
+      rootPath: join(__dirname, '..', 'images', 'imagess'),
     }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, {
+    provide: APP_GUARD,
+    useClass: RolesGuard,
+  },],
 })
 export class AppModule {}

@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 
 @Schema()
 export class Journal {
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Journal' })
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Users' })
   creator_id: mongoose.Schema.Types.ObjectId;
 
   @Prop()

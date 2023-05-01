@@ -11,6 +11,7 @@ import {
   UseInterceptors,
   UploadedFile,
   ValidationPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express/multer';
 import { diskStorage } from 'multer';
@@ -19,6 +20,9 @@ import { CreateJournalDto } from './Dtos/create_journal.dto';
 import { QueryStringDto } from './Dtos/query.dto';
 import { JournalService } from './journal.service';
 import { Journal } from './Schemas/journal.schema';
+import { Roles } from 'src/auth/Decorator/roles.decorator';
+import { Role } from 'src/auth/enum/role.enum';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('journals')
 export class JournalController {
@@ -28,12 +32,16 @@ export class JournalController {
   async getApprovedJournals(@Query() queryString: QueryStringDto) {
     return await this.journalService.getApprovedJournals(queryString);
   }
-
+  
+  @UseGuards(AuthGuard('jwt'))
+  @Roles(Role.Journalist, Role.Admin)
   @Get('pending')
   async getPendingJournals(@Query() querystring: QueryStringDto) {
     return await this.journalService.getPendingJournals(querystring);
   }
 
+  @UseGuards(AuthGuard('jwt'))
+  @Roles(Role.Journalist, Role.Admin)
   @Get('pending/:id')
   async getPendingJournal(@Param('id') id: string) {
     return await this.journalService.getPendingJournal(id);
@@ -43,18 +51,24 @@ export class JournalController {
   async getApprovedJournal(@Param('id') id: string) {
     return await this.journalService.getApprovedJournal(id);
   }
-
+ 
+  @UseGuards(AuthGuard('jwt'))
+  @Roles(Role.Admin)
   @Post()
   async approveJournal(@Body() body: { id: string; journal: Journal }) {
     return await this.journalService.approveJournal(body.id, body.journal);
   }
 
+  @UseGuards(AuthGuard('jwt'))
+  @Roles(Role.Journalist)
   @Post('Pending')
   @UsePipes(new ValidationPipe({ transform: true }))
   async createJournal(@Body() body: CreateJournalDto) {
     return await this.journalService.createJournal(body);
   }
 
+  @UseGuards(AuthGuard('jwt'))
+  @Roles(Role.Journalist)
   @Post('pending/image/:id')
   @UseInterceptors(
     FileInterceptor('image', {
@@ -107,21 +121,29 @@ export class JournalController {
     return response;
   }
 
+  @UseGuards(AuthGuard('jwt'))
+  @Roles(Role.Journalist)
   @Patch('pending/:id')
   async updatePendingJournal(@Param('id') id: string, @Body() body) {
     return await this.journalService.updatePendingJournal(id, body);
   }
 
+  @UseGuards(AuthGuard('jwt'))
+  @Roles(Role.Journalist, Role.Admin)
   @Patch('/:id')
   async updateApprovedJournal(@Param('id') id: string, @Body() body) {
     return await this.journalService.updateApprovedJournal(id, body);
   }
 
+  @UseGuards(AuthGuard('jwt'))
+  @Roles(Role.Journalist, Role.Admin)
   @Delete('pending/:id')
   async deletePendingJournal(@Param('id') id: string) {
     return this.journalService.deletePendingJournal(id);
   }
 
+  @UseGuards(AuthGuard('jwt'))
+  @Roles(Role.Journalist, Role.Admin)
   @Delete('/:id')
   async deleteApprovedJournal(@Param('id') id: string) {
     return this.journalService.deleteApprovedJournal(id);
