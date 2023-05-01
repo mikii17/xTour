@@ -33,6 +33,7 @@ export class CommentsController {
 
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Patch('/:id')
   update(@Param('id') id: string, @Body() updateCommentDto: UpdateCommentDto) {
     return this.commentsService.update(id, updateCommentDto);
