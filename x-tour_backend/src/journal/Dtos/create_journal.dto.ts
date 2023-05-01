@@ -14,4 +14,5 @@ export class CreateJournalDto {
   
   @IsNotEmpty()
   description: string;
+  
 }
