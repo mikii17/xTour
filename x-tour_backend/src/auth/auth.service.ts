@@ -8,7 +8,6 @@ import { User } from 'src/user/userSchema/user.schema';
 import { ForbiddenException } from '@nestjs/common';
 import { Role } from 'src/auth/enum/role.enum';
 import { users } from 'src/user/userDto/user.dto';
-import { Roles } from './Decorator/roles.decorator';
 
 @Injectable()
 export class AuthService {

@@ -4,7 +4,6 @@ import { FileInterceptor } from '@nestjs/platform-express/multer';
 import { diskStorage } from 'multer';
 import { UserService } from './user.service';
 import { Users } from './userDto/update.dto';
-import { users } from './userDto/user.dto';
 import { User } from './userSchema/user.schema';
 import { Request } from 'express';
 
