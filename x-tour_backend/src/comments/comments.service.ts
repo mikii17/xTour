@@ -13,10 +13,8 @@ export class CommentsService {
   ){}
   async createComment(createCommentDto: CreateCommentDto) {
    const {commenterId,replyId, postId, message} = createCommentDto;
-   const comment = await this.commentsModel.create({commenterId,replyId, postId, message});
-  //  const commentId = comment.commenterId;
-  //  await this.userService.addCourse(id, commentID);
-  return comment;
+
+   return await this.commentsModel.create({commenterId,replyId, postId, message});
   }
 
 
@@ -41,8 +39,7 @@ export class CommentsService {
 
 
   async findOne(id: String) {
-    console.log(id);
-    const comment = (await this.commentsModel.findById(id));
+    const comment = await this.commentsModel.findById(id);
     
     if(!comment) throw new NotFoundException('Course Not Found');
     return comment.message;

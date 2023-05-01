@@ -1,25 +1,21 @@
 import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
-import * as mongoose from 'mongoose';
-import { type } from 'os';
+import mongoose from 'mongoose';
 
 @Schema({
     timestamps: true
 })
 export class Comments{
-    @Prop({required: true})
-    commenterId: String;
+    @Prop({required: true, ref: "Users", type: mongoose.Types.ObjectId})
+    commenterId: mongoose.Types.ObjectId;
     
-    @Prop()
-    replyId: String;
+    @Prop({ref: 'Comments', type: mongoose.Types.ObjectId})
+    replyId: mongoose.Types.ObjectId;
 
     @Prop()
     postId: String;
 
-
     @Prop()
     message:String;
-
 
 }
 
