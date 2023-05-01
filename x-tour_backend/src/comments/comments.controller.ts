@@ -20,7 +20,7 @@ export class CommentsController {
     return await this.commentsService.findOne(id);
   }
   
-  @Get()
+  @Get('post/:postId')
   async getComments(@Param('postId') postId: String){
     return await this.commentsService.getComment(postId);
   }
