@@ -18,7 +18,7 @@ export class PostsService {
     const newPost = new Model(createPostDto)
     return await newPost.save();
   }
-  async insertImages(Model: any, images: Array<Express.Multer.File>, id: string){
+  async insertImages(Model: any, images: Array<any>, id: string){
     const createdPost = await Model.findById({_id: id})
     createdPost.images = images
     return await createdPost.save()
@@ -83,7 +83,7 @@ async createAproved(createPost): Promise<Post>{
   return await this.create(this.postModel, createPost)
 }
 
-async InsertAprovedimages(images: Array<Express.Multer.File>, id: string){
+async InsertAprovedimages(images: Array<any>, id: string){
   return await this.insertImages(this.postModel, images, id)
 }
 async findAllAproved(){
@@ -102,9 +102,6 @@ async updateAproved(
 async removeAproved(id: string){
   return await this.remove(this.postModel,id)
 }
-async updateImages(images: Array<Express.Multer.File>, id){
-return await this.insertImages(this.postModel, images, id) 
-}
 
 //================================================
 // operations for the pennding collection
@@ -113,9 +110,6 @@ async createPending(createPost): Promise<Post>{
   return await this.create(this.PendingpostModel, createPost)
 }
 
-async insertpendingImages(images: Array<Express.Multer.File>, id: string){
-  return await this.insertImages(this.PendingpostModel, images, id)
-}
 async findAllPendings(){
   return await this.findAll(this.PendingpostModel)
 }
@@ -129,8 +123,8 @@ async updatePending(
 async removePending(id: string){
   return await this.remove(this.PendingpostModel,id)
 }
-async insertPendingImages(images: Array<Express.Multer.File>, id){
-return await this.insertImages(this.PendingpostModel, images, id) 
+async insertPendingImages(images: Array<any>, id){
+return await this.insertImages(this.PendingpostModel, images, id)
 }
 
 }
