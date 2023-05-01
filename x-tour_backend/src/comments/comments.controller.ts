@@ -9,6 +9,7 @@ import { getReplyDto } from './dto/getReply.dto';
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 
+  @UseGuards(AuthGuard('jwt'))
   @Post()
   async create(@Body() createCommentDto: CreateCommentDto) {
     return await this.commentsService.createComment(createCommentDto);
