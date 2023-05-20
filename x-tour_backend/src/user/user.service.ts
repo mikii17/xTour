@@ -32,7 +32,7 @@ export class UserService {
     }
 
     async followUser(userId: string, followedUserId: string) {
-        await this.userModel.updateOne({ _id: userId }, { $push: { following: followedUserId } });
+        await this.userModel.updateOne({ _id: userId }, {  $addToSet : { following: followedUserId } });
         await this.userModel.updateOne({ _id: followedUserId }, { $addToSet : { follower: userId } });
     }
     
