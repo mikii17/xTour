@@ -47,7 +47,7 @@ export class UserService {
     }
 
     async getUserFollowing(userId: string): Promise<User[]> {
-        const user = await this.userModel.findOne({userId}).populate('follower').select('following').exec();
+        const user = await this.userModel.findOne({userId}).populate('following').select('following').exec();
         return user.following;
     }
 
