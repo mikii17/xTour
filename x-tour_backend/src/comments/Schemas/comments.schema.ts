@@ -10,10 +10,10 @@ export class Comments{
     commenterId: User;
     
     @Prop({ref: 'Comments', type: mongoose.Schema.Types.ObjectId})
-    replyId: Comments;
+    replyId: mongoose.Schema.Types.ObjectId;
 
     @Prop({ref: 'Post', type: mongoose.Schema.Types.ObjectId})
-    postId: Post ;
+    postId: mongoose.Schema.Types.ObjectId;
 
     @Prop()
     message:String;
