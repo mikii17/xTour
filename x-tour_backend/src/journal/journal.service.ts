@@ -53,8 +53,8 @@ export class JournalService {
 
   // Operations on Pending Journals
 
-  async createJournal(journal: CreateJournalDto) {
-    return await this.journalPendingModel.create({ ...journal, image: '' });
+  async createJournal(creator_id : string, journal: CreateJournalDto) {
+    return await this.journalPendingModel.create({ creator_id, ...journal, image: '' });
   }
   async insertImageOnPending(id: string, image_url: string) {
     return await this.insertImage(this.journalPendingModel, id, image_url);
