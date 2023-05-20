@@ -4,5 +4,5 @@ import { Role } from "src/auth/enum/role.enum";
 export class Users{
     password: string;
     profilePicture: string;
-    role: Role[];
+    username: string;
 }
