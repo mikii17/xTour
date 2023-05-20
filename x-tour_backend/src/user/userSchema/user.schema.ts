@@ -12,14 +12,14 @@ export class User{
     @Prop()
     password: string;
 
-    @Prop()
-    follower: string[];
+    @Prop({type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User'}] })
+    follower: User[];
 
-    @Prop()
-    following: string[];
+    @Prop({type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User'}] })
+    following: User[];
 
-    @Prop()
-    posts: string[];
+    @Prop({type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post'}] })
+    posts: Post[];
 
     @Prop()
     bookmarkPosts: string[];
