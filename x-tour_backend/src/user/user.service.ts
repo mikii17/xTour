@@ -41,13 +41,13 @@ export class UserService {
         await this.userModel.updateOne({ _id: unfollowedUserId }, { $pull: { follower: userId } });
     }
 
-    async getUserFollowers(userId: string): Promise<string[]> {
-        const user = await this.userModel.findOne({userId}).select('follower').exec();
+    async getUserFollowers(userId: string): Promise<User[]> {
+        const user = await this.userModel.findOne({userId}).populate('follower').select('follower').exec();
         return user.follower;
     }
 
-    async getUserFollowing(userId: string): Promise<string[]> {
-        const user = await this.userModel.findOne({userId}).select('following').exec();
+    async getUserFollowing(userId: string): Promise<User[]> {
+        const user = await this.userModel.findOne({userId}).populate('follower').select('following').exec();
         return user.following;
     }
 
