@@ -7,7 +7,7 @@ export const postSchema = new mongoose.Schema({
     comments: { type: Array<string>, required: true},
     likes: { type: Array<string>, required: true},
     creatorId: { type: String},
-    images: { type: Array<Express.Multer.File>},
+    images: { type: Array<any>},
 });
 
 export class Post {
@@ -18,6 +18,6 @@ export class Post {
         public comments: Array<string>,
         public likes: Array<string>,
         public creatorId: string,
-        public images: Array<Express.Multer.File>,
+        public images: Array<any>,
     ){}
 }
