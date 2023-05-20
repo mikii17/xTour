@@ -33,7 +33,7 @@ export class UserService {
 
     async followUser(userId: string, followedUserId: string) {
         await this.userModel.updateOne({ _id: userId }, { $push: { following: followedUserId } });
-        await this.userModel.updateOne({ _id: followedUserId }, { $push: { follower: userId } });
+        await this.userModel.updateOne({ _id: followedUserId }, { $addToSet : { follower: userId } });
     }
     
     async unfollowUser(userId: string, unfollowedUserId: string) {
@@ -52,11 +52,11 @@ export class UserService {
     }
 
     async posts(userId: string, postId: string){
-        await this.userModel.updateOne({_id: userId},{$push: {posts: postId}});
+        await this.userModel.updateOne({_id: userId},{ $addToSet : {posts: postId}});
     }
 
     async bookmarkPosts(userId: string, postId: string){
-        await this.userModel.findByIdAndUpdate(userId, {$push: {posts: postId}});
+        await this.userModel.findByIdAndUpdate(userId, { $addToSet : {posts: postId}});
     }
 
 
@@ -67,12 +67,12 @@ export class UserService {
     }
 
     async isJournal(userId: string): Promise<any>{
-        await this.userModel.findByIdAndUpdate(userId, {$push: {role: Role.Journalist}})
+        await this.userModel.findByIdAndUpdate(userId, { $addToSet : {role: Role.Journalist}})
        
     }
 
     async isAdmin(userId: string): Promise<any>{
-        await this.userModel.findByIdAndUpdate(userId, {$push: {role: Role.Admin}})
+        await this.userModel.findByIdAndUpdate(userId, { $addToSet : {role: Role.Admin}})
        
     }
   
