@@ -64,7 +64,8 @@ export class JournalController {
   @Post('Pending')
   @UsePipes(new ValidationPipe({ transform: true }))
   async createJournal(@Body() body: CreateJournalDto) {
-    return await this.journalService.createJournal(body);
+    const user = req.user;
+    return await this.journalService.createJournal(user['id'], body);
   }
 
   @UseGuards(AuthGuard('jwt'))
