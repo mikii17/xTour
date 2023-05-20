@@ -1,8 +1,6 @@
 import { IsNotEmpty } from "class-validator";
 
 export class CreateJournalDto {
-  @IsNotEmpty()
-  creator_id: string;
 
   @IsNotEmpty()
   link: string;
