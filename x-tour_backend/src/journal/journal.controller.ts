@@ -416,6 +416,5 @@ export class JournalController {
 
 
 
-}
 
 
