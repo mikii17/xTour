@@ -14,7 +14,6 @@ export class PostsController {
   create(
     @Body() createPostDto: CreatePostDto
   ){
-    console.log(createPostDto)
     return this.postsService.createAproved(createPostDto);
   }
   @Post('images/:id')
@@ -31,7 +30,6 @@ export class PostsController {
     @Param('id') id: string,
     @UploadedFiles() files: Array<Express.Multer.File>
   ){
-    console.log(1243984719857938)
     const images = [];
     files.forEach((file) => {
       images.push({
