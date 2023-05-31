@@ -1,4 +1,4 @@
-import { Body, Post, Req, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Delete, Patch, Post, Req, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { Controller } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
@@ -12,28 +12,30 @@ import { Tokens } from './type/tokens.type';
 export class AuthController {
     constructor(private authService: AuthService){}
 
-  @Post('/signin')
+  @Post('/login')
   signin(@Body() dto: AuthDto): Promise<Tokens> {
     return this.authService.login(dto);
   }
 
-  @Post('/signUp')
+  @Post('/signup')
   @UsePipes(new ValidationPipe({transform: true}))
   signUp(@Body() dto: users): Promise<User> {
     return this.authService.register(dto);
   }
 
-  @Post('logout')
-  @UseGuards(AuthGuard('jwt'))
-  logout(@Req() req: Request) {
-    const user=req.user;
-    return this.authService.logout(user['id']);
-  }
-
-  @Post('refresh')
+  @Patch('/refresh')
   @UseGuards(AuthGuard('jwt-refresh'))
   refresh(@Req() req: Request) {
     const user=req.user;
     return this.authService.refreshTokens(user['id'], user['refreshToken']);
   }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Delete('logout')
+  logout(@Req() req: Request) {
+    const user=req.user;
+    return this.authService.logout(user['id']);
+  }
+
+ 
 }

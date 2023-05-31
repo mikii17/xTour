@@ -1,98 +1,53 @@
-/* eslint-disable prettier/prettier */
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFiles, Query, ValidationPipe, UsePipes } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFiles, Query, ValidationPipe, UsePipes, UseGuards, Req } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { AuthGuard } from '@nestjs/passport';
+import { Roles } from 'src/auth/Decorator/roles.decorator';
+import { Role } from 'src/auth/enum/role.enum';
+import { RolesGuard } from 'src/auth/guard/roles.guard';
+import { query } from 'express';
+import { QueryPostDto } from './dto/query.dto';
 
 
 @Controller('posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
-  @Post()
-  create(
-    @Body() createPostDto: CreatePostDto
-  ){
-    return this.postsService.createAproved(createPostDto);
-  }
-  @Post('images/:id')
-  @UseInterceptors(FilesInterceptor('files', 3, {
-
-    storage: diskStorage({
-      destination: './images/Approved',
-      filename(req, file, callback){
-        callback(null, `${Date.now()}-${file.originalname}`)
-      }
-    })
-  }))
-  createImages(
-    @Param('id') id: string,
-    @UploadedFiles() files: Array<Express.Multer.File>
-  ){
-    const images = [];
-    files.forEach((file) => {
-      images.push({
-        originalName: file.originalname,
-        newName: file.filename,
-      });
-    });
-    return this.postsService.InsertAprovedimages(images, id);
-  }
-  
-  @Post('like')
-  liked(
-    @Body('postId') postId: string,
-    @Body('userId') userId: string
-  ){
-    return this.postsService.liker(postId, userId)
-  }
-
-  @Get()
-  async findAll() {
-    const posts = await this.postsService.findAllAproved();
+  @UseGuards(AuthGuard('jwt'))
+  @Get('/pending')
+  async findAllpending(@Query() query: QueryPostDto) {
+    const posts = await this.postsService.findAllPendings(query);
     return posts
   }
 
-  @Get('homepage')
-  HomePagePost(@Query() friendsList: Array<{userId: string}>){
-    return this.postsService.findhomepagePost(friendsList);
+  @UseGuards(AuthGuard('jwt'))
+  @Get('/homepage')
+  HomePagePost(@Query() query: QueryPostDto, @Req() req){
+    return this.postsService.findhomepagePost(query, req.user['id']);
   }
 
-  @Get('search')
-  searchPost(@Query() serachQuery: string){
-    return this.postsService.searchAprovedposts(serachQuery);
+  @Get()
+  async findAll(@Query() query: QueryPostDto ) {
+    const posts = await this.postsService.findAllAproved(query);
+    return posts
   }
 
-  @Patch(':id')
-  async update(
-    @Param('id') postId: string, 
-    @Body('story') story: string,
-    @Body('discription') disc: string,
-    ) {
-
-    const result = await this.postsService.updateAproved(postId, story, disc);
-    return result
-  }
-
-  @Delete(':id')
-  async delete(@Param('id') id: string){
-    console.log('delete')
-    return await this.postsService.removeAproved(id);
-  }
-
-  // end points for the pending posts////////////////////////////////////////////////////////////////
-  @Post('pending')
+  @UseGuards(AuthGuard('jwt'))
+  @Post('/pending')
   @UsePipes(new ValidationPipe({ transform: true }))
   createPending(
+    @Req() req,
     @Body() createPostDto: CreatePostDto
   ){
-    console.log(createPostDto)
-    return this.postsService.createPending(createPostDto);
+    const id = req.user['id']
+    return this.postsService.createPending(createPostDto, id);
   }
   
+  @UseGuards(AuthGuard('jwt'))
   @Post('pending/images/:id')
-  @UseInterceptors(FilesInterceptor('files', 3, {
+  @UseInterceptors(FilesInterceptor('images', 3, {
 
     storage: diskStorage({
       destination: './images/pending',
@@ -109,33 +64,110 @@ export class PostsController {
 
     const images = [];
     files.forEach((file) => {
-      images.push({
-        originalName: file.originalname,
-        newName: file.filename,
-      });
+      images.push(file.filename)
     });
     return this.postsService.insertPendingImages(images, id);
   }
   
-  @Get('pending')
-  async findAllpending() {
-    const posts = await this.postsService.findAllPendings();
-    return posts
+  @Post('images/:id')
+  @UseInterceptors(FilesInterceptor('files', 3, {
+
+    storage: diskStorage({
+      destination: './images/Approved',
+      filename(req, file, callback){
+        callback(null, `${Date.now()}-${file.originalname}`)
+      }
+    })
+  }))
+  createImages(
+    @Param('id') id: string,
+    @UploadedFiles() files: Array<Express.Multer.File>
+  ){
+    const images = [];
+    files.forEach((file) => {
+      images.push(file.filename);
+    });
+    return this.postsService.InsertAprovedimages(images, id);
   }
 
+  @Roles(Role.Admin)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Post('/:id')
+  create(
+    @Body() createPostDto: CreatePostDto,
+    @Param('id') id
+  ){
+   
+    return this.postsService.createAproved(createPostDto,id);
+  }
+  
+  @UseGuards(AuthGuard('jwt'))
+  @Patch('like/:postId')
+  like(
+    @Param('postId') postId ,
+    @Req() req
+  ){
+    const userId=req.user['id']
+    return this.postsService.like(postId, userId)
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Patch('unlike/:postId')
+  unlike(
+    @Param('postId') postId ,
+    @Req() req
+  ){
+    const userId=req.user['id']
+    return this.postsService.unlike(postId, userId)
+  }
+
+  @UseGuards(AuthGuard('jwt'))
   @Patch('pending/:id')
   async updatePending(
     @Param('id') postId: string, 
     @Body('story') story: string,
-    @Body('discription') disc: string,
+    @Body('description') disc: string,
     ) {
     const result = await this.postsService.updatePending(postId, story, disc);
     return result
   }
 
-  @Delete('pending:id')
-  async deletePending(@Param('id') id: string){
-    console.log('delete')
-    return await this.postsService.removePending(id);
+  // @Get('search')
+  // searchPost(@Query() serachQuery: string){
+  //   return this.postsService.searchAprovedposts(serachQuery);
+  // }
+
+
+  // @Roles(Role.Admin)
+  // @UseGuards(AuthGuard('jwt'), RolesGuard)
+  // @Patch(':id')
+  // async update(
+  //   @Param('id') postId: string, 
+  //   @Body('story') story: string,
+  //   @Body('discription') disc: string,
+  //   ) {
+
+  //   const result = await this.postsService.updateAproved(postId, story, disc);
+  //   return result
+  // }
+
+ 
+
+  @UseGuards(AuthGuard('jwt'))
+  @Delete('pending/:id')
+  async deletePending(@Req() req,@Param('id') id: string){
+    const userid=req.user['id']
+    return await this.postsService.removePending(id,userid);
   }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Delete('/:id')
+  async delete(@Req() req, @Param('id') postId){
+    const id=req.user['id']
+    return await this.postsService.removeAproved(id,postId);
+  }
+
+ 
+
+  
 }

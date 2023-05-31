@@ -2,6 +2,9 @@ import { IsNotEmpty, Length } from "class-validator";
 import { Role } from "src/auth/enum/role.enum";
 
 export class users{
+    
+    fullName: string
+
     @IsNotEmpty()
     username: string;
 
@@ -14,6 +17,8 @@ export class users{
     following: string[];
 
     posts: string[];
+    
+    penddingPosts: string[];
 
     bookmarkPosts: string[];
 

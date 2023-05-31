@@ -5,6 +5,7 @@ import { CreateJournalDto } from './Dtos/create_journal.dto';
 import { QueryStringDto } from './Dtos/query.dto';
 import { Journal } from './Schemas/journal.schema';
 import { JournalPending } from './Schemas/journal_pending.schema';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class JournalService {
@@ -12,6 +13,7 @@ export class JournalService {
     @InjectModel(Journal.name) private readonly journalModel: Model<Journal>,
     @InjectModel(JournalPending.name)
     private readonly journalPendingModel: Model<JournalPending>,
+    private readonly userService: UserService,
   ) {}
 
   async insertImage(model: any, id: string, image_url: string) {
@@ -19,11 +21,11 @@ export class JournalService {
       id,
       { image: image_url },
       { returnOriginal: false },
-    );
+    ).populate("creator_id");
   }
 
   async getJournal(model: any, id: string) {
-    return await model.findById(id);
+    return await model.findById(id).populate("creator_id");
   }
 
   async getJournals(model, queryString: QueryStringDto) {
@@ -32,19 +34,19 @@ export class JournalService {
     const journals = await model
       .find({ title: { $regex: search, $options: 'i' } })
       .limit(perPage)
-      .skip(skip);
-    console.log(search, perPage, skip)
+      .skip(skip)
+      .populate("creator_id");
     const journalsCount = await model.count({
       title: { $regex: search, $options: 'i' },
     });
 
-    return { journals, count: journalsCount };
+    return journals;
   }
 
   async updateJournal(model: any, id: string, journal) {
     return await model.findByIdAndUpdate(id, journal, {
       returnOriginal: false,
-    });
+    }).populate("creator_id");
   }
 
   async deleteJournal(model, id: string) {
@@ -54,7 +56,9 @@ export class JournalService {
   // Operations on Pending Journals
 
   async createJournal(creator_id : string, journal: CreateJournalDto) {
-    return await this.journalPendingModel.create({ creator_id, ...journal, image: '' });
+    const newJournal = await this.journalPendingModel.create({ ...journal, creator_id, image: '' });
+    await this.userService.penddingJournal(creator_id, newJournal.id);
+    return newJournal.populate("creator_id");
   }
   async insertImageOnPending(id: string, image_url: string) {
     return await this.insertImage(this.journalPendingModel, id, image_url);
@@ -70,7 +74,8 @@ export class JournalService {
     return await this.updateJournal(this.journalPendingModel, id, journal);
   }
 
-  async deletePendingJournal(id: string) {
+  async deletePendingJournal(id: string, userId: string) {
+    await this.userService.removePenddingJournal(userId, id);
     return await this.deleteJournal(this.journalPendingModel, id);
   }
 
@@ -78,7 +83,10 @@ export class JournalService {
 
   async approveJournal(id: string, journal: Journal) {
     await this.journalPendingModel.findByIdAndDelete(id);
-    return await this.journalModel.create(journal);
+    await this.userService.removePenddingJournal(journal.creator_id, id);
+    const newJournal = await this.journalModel.create(journal);
+    await this.userService.journals(journal.creator_id, newJournal.id);
+    return newJournal;
   }
 
   async getApprovedJournal(id: string) {
@@ -97,7 +105,8 @@ export class JournalService {
     return await this.updateJournal(this.journalModel, id, journal);
   }
 
-  async deleteApprovedJournal(id: string) {
+  async deleteApprovedJournal(id: string, userId: string) {
+    await this.userService.removeJournals(userId, id);
     return await this.deleteJournal(this.journalModel, id);
   }
 }

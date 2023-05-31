@@ -16,15 +16,15 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(username: string, password: string): Promise<any> {
-    const user = await this.userService.getUser({ username });
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (user && isMatch) {
-      const { password, ...result } = user;
-      return result;
-    }
-    return null;
-  }
+  // async validateUser(username: string, password: string): Promise<any> {
+  //   const user = await this.userService.getUser({ username });
+  //   const isMatch = await bcrypt.compare(password, user.password);
+  //   if (user && isMatch) {
+  //     const { password, ...result } = user;
+  //     return result;
+  //   }
+  //   return null;
+  // }
   async register(user: users): Promise<User> {
     // const payload={username: user.username ,sub: user.userId};
 
@@ -33,6 +33,9 @@ export class AuthService {
       follower: [],
       following: [],
       posts: [],
+      penddingPosts: [],
+      journals: [],
+      pendingJournal: [],
       bookmarkPosts: [],
       profilePicture: '',
       refresh_token: '',
@@ -44,7 +47,7 @@ export class AuthService {
     // const payload={username: user.username ,sub: user.userId};
     const username = users.username;
     const password = users.password;
-    const user = (await this.userService.getUser({ username })) as any;
+    const user = (await this.userService.getUser( {username})) as any;
     const isMatch = await bcrypt.compare(password, user.password);
     if (!user || !isMatch) {
       throw new UnauthorizedException();

@@ -4,6 +4,8 @@ import { FilterQuery, Model } from 'mongoose';
 import { User, userDocument } from './userSchema/user.schema';
 import * as bcrypt from 'bcrypt';
 import { Role } from "src/auth/enum/role.enum";
+import { Post } from 'src/posts/model/post.model';
+import { Journal } from 'src/journal/Schemas/journal.schema';
 
 @Injectable()
 export class UserService {
@@ -22,23 +24,22 @@ export class UserService {
         const salt = await bcrypt.genSalt();
         const hashPassword = await bcrypt.hash(user.password, salt);
         user.password=hashPassword
-
         const users= new this.userModel(user);
         return  await users.save()
     }
 
     async updateUser(filterQuery: FilterQuery<User>, user: Partial<User>): Promise<User>{
-        return this.userModel.findByIdAndUpdate(filterQuery,user)
+        return this.userModel.findByIdAndUpdate(filterQuery,user, {returnOriginal: false})
     }
 
     async followUser(userId: string, followedUserId: string) {
-        await this.userModel.updateOne({ _id: userId }, {  $addToSet : { following: followedUserId } });
-        await this.userModel.updateOne({ _id: followedUserId }, { $addToSet : { follower: userId } });
+        await this.userModel.findByIdAndUpdate(followedUserId, { $addToSet : { follower: userId } });
+        return await this.userModel.findByIdAndUpdate(userId , {  $addToSet : { following: followedUserId } },{returnOriginal: false}); 
     }
     
     async unfollowUser(userId: string, unfollowedUserId: string) {
-        await this.userModel.updateOne({ _id: userId }, { $pull: { following: unfollowedUserId } });
-        await this.userModel.updateOne({ _id: unfollowedUserId }, { $pull: { follower: userId } });
+        await this.userModel.findByIdAndUpdate(unfollowedUserId , { $pull: { follower: userId } });
+        return await this.userModel.findByIdAndUpdate(userId , { $pull: { following: unfollowedUserId } },{returnOriginal: false});
     }
 
     async getUserFollowers(userId: string): Promise<User[]> {
@@ -47,18 +48,76 @@ export class UserService {
     }
 
     async getUserFollowing(userId: string): Promise<User[]> {
-        const user = await this.userModel.findOne({userId}).populate('following').select('following').exec();
+        const user = await this.userModel.findById(userId).populate('following').select('following').exec();
         return user.following;
     }
 
     async posts(userId: string, postId: string){
-        await this.userModel.updateOne({_id: userId},{ $addToSet : {posts: postId}});
+        return await this.userModel.findByIdAndUpdate(userId,{ $addToSet : {posts: postId}});
+    }
+
+    async removePosts(userId: string, postId: string){
+        await this.userModel.findByIdAndUpdate(userId,{ $pull : {posts: postId}});
+    }
+
+    async getPosts(id: string): Promise<Post[]> {
+        const user = await this.userModel.findOne({id}).populate('posts').select('posts').exec();
+        return user.posts;
+    }
+
+    async penddingposts(userId: string, postId: string){
+        return await this.userModel.findByIdAndUpdate(userId, { $addToSet : {penddingPosts: postId}},{returnOriginal: false});
+    }
+
+    async getPenddingPosts(id: string): Promise<Post[]> {
+        const user = await this.userModel.findOne({id}).populate('penddingPosts').select('penddingPosts').exec();
+        return user.penddingPosts;
+    }
+
+
+    async removePenddingposts(userId: string, postId: string){
+        await this.userModel.findByIdAndUpdate(userId, { $pull : {penddingPosts: postId}});
+    }
+
+    async journals(userId, journalId: string){
+        return await this.userModel.findByIdAndUpdate(userId,{ $addToSet : {journals: journalId}},{returnOriginal: false});
+    }
+
+    async removeJournals(userId: string, journalId: string){
+        await this.userModel.findByIdAndUpdate(userId,{ $pull : {journals: journalId}});
+    }
+
+    async getJournals(id: string): Promise<Journal[]> {
+        const user = await this.userModel.findOne({id}).populate('journals').select('journals').exec();
+        return user.journals;
+    }
+
+    async penddingJournal(userId: string, journalId: string){
+        return await this.userModel.findByIdAndUpdate(userId, { $addToSet : {pendingJournal: journalId}},{returnOriginal: false});
+    }
+
+    async getPenddingJournal(id: string): Promise<Journal[]> {
+        const user = await this.userModel.findOne({id}).populate('pendingJournal').select('pendingJournal').exec();
+        return user.pendingJournal;
+    }
+
+
+    async removePenddingJournal(userId, journalId: string){
+        await this.userModel.findByIdAndUpdate(userId, { $pull : {pendingJournal: journalId}});
     }
 
     async bookmarkPosts(userId: string, postId: string){
-        await this.userModel.findByIdAndUpdate(userId, { $addToSet : {posts: postId}});
+        return await this.userModel.findByIdAndUpdate(userId, { $addToSet : {posts: postId}},{returnOriginal: false});
     }
 
+    async unbookmarkPosts(userId: string, postId: string){
+        return await this.userModel.findByIdAndUpdate(userId, { $pull : {posts: postId}},{returnOriginal: false});
+    }
+    
+    async getBookmarkPosts(id: string): Promise<Post[]> {
+        const user = await this.userModel.findOne({id}).populate('bookmarkPosts').select('bookmarkPosts').exec();
+        return user.bookmarkPosts;
+    }
 
     async updateRtHash(userId: string, rt: string): Promise<void> {
         const salt = await bcrypt.genSalt();
@@ -67,7 +126,7 @@ export class UserService {
     }
 
     async isJournal(userId: string): Promise<any>{
-        await this.userModel.findByIdAndUpdate(userId, { $addToSet : {role: Role.Journalist}})
+        return await this.userModel.findByIdAndUpdate(userId, { $addToSet : {role: Role.Journalist}})
        
     }
 
@@ -75,5 +134,7 @@ export class UserService {
         await this.userModel.findByIdAndUpdate(userId, { $addToSet : {role: Role.Admin}})
        
     }
+
+
   
 } 

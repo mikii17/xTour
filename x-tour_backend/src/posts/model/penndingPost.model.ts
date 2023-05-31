@@ -4,15 +4,14 @@ import * as mongoose from "mongoose";
 export const penddingPostSchema = new mongoose.Schema({
     story: { type:  String},
     description: { type: String},
-    comments: { type: Array<string>, required: true},
-    likes: { type: Array<string>, required: true},
-    creatorId: { type: String},
-    images: { type: Array<any>},
+    comments: { type: [{type: mongoose.Schema.Types.ObjectId, ref:"Comments"}], required: true},
+    likes: { type: [{type: mongoose.Schema.Types.ObjectId, ref:'User'}], required: true},
+    creatorId: { type: mongoose.Schema.Types.ObjectId, ref: "User"},
+    images: { type: Array<String>},
 });
 
 export class penddingPost {
     constructor(
-        public id: string,
         public story: string,
         public description: string,
         public comments: Array<string>,

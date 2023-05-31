@@ -1,6 +1,6 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
-import { User } from './userSchema/user.schema';
+import { User } from 'src/user/userSchema/user.schema';
 
 @Schema()
 export class Journal {

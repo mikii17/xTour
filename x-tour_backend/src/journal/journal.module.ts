@@ -8,6 +8,7 @@ import {
   JournalPendingSchema,
 } from './Schemas/journal_pending.schema';
 import { JwtModule } from '@nestjs/jwt';
+import { UserModule } from 'src/user/user.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { JwtModule } from '@nestjs/jwt';
       { name: JournalPending.name, schema: JournalPendingSchema },
     ]),
     JwtModule.register({}),
+    UserModule
   ],
   providers: [JournalService],
   controllers: [JournalController],

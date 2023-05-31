@@ -1,9 +1,7 @@
 /* eslint-disable prettier/prettier */
-export interface CreatePostDto {
-    story: string,
-    description: string,
-    comments: Array<string>,
-    likes: Array<string>,
-    images: Array<any>,
+export class CreatePostDto {
+    story: string
+    description: string
+    images: string[]
     creatorId: string
 }

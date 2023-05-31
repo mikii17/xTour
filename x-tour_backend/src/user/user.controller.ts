@@ -7,6 +7,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Req,
   UploadedFile,
   UseGuards,
@@ -21,21 +22,144 @@ import { UserService } from './user.service';
 import { Users } from './userDto/update.dto';
 import { User } from './userSchema/user.schema';
 import { Request } from 'express';
+import { Role } from 'src/auth/enum/role.enum';
+import { Roles } from 'src/auth/Decorator/roles.decorator';
+import { Post as PostModel } from 'src/posts/model/post.model';
+import { Journal } from 'src/journal/Schemas/journal.schema';
+import { RolesGuard } from 'src/auth/guard/roles.guard';
 
-@Controller('user')
+@Controller('users')
 export class UserController {
   constructor(private userService: UserService) {}
 
   @UseGuards(AuthGuard('jwt'))
-  @Get()
+  @Get('/info')
   async getUser(@Req() req: Request): Promise<User> {
     const user = req.user;
-    return await this.userService.getUser(user['id']);
+    const id=user['id'];
+    return await this.userService.getUser({_id : id });
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('/followers')
+  async getUserFollowers(@Req() req: Request,@Query() query): Promise<User[]> {
+    const user = req.user;
+    return this.userService.getUserFollowers(user['id'], );
+  }
+  @UseGuards(AuthGuard('jwt'))
+  @Get('/posts')
+  async getposts(@Req() req: Request): Promise<PostModel[]> {
+    const user = req.user;
+    return this.userService.getPosts(user['id']);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('/bookmark')
+  async getBookmarkposts(@Req() req: Request): Promise<PostModel[]> {
+    const user = req.user;
+    return this.userService.getBookmarkPosts(user['id']);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('/pendingPosts')
+  async getPenndingposts(@Req() req: Request): Promise<PostModel[]> {
+    const user = req.user;
+    return this.userService.getPenddingPosts(user['id']);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('/journals')
+  async getjournal(@Req() req: Request): Promise<Journal[]> {
+    const user = req.user;
+    return this.userService.getJournals(user['id']);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('/penddingJournals')
+  async getPenndingJournals(@Req() req: Request): Promise<Journal[]> {
+    const user = req.user;
+    return this.userService.getPenddingJournal(user['id']);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('/followings')
+  async getUserFollowing(@Req() req: Request): Promise<User[]> {
+    const user = req.user;
+    return this.userService.getUserFollowing(user['id']);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('/:id')
+  async getOtherUser(@Param('id') id): Promise<User> {
+    return await this.userService.getUser(id);
   }
 
   @Get()
   async getUsers(): Promise<User[]> {
     return await this.userService.getUsers();
+  }
+
+  @Roles(Role.Admin)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Patch('approveJournal/:id')
+  async journal(@Param('id') id): Promise<any> {
+    return await this.userService.isJournal(id);
+  }
+
+  @Roles(Role.Admin)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Patch('approveAdmin')
+  async admin(@Req() req: Request): Promise<any> {
+    const user = req.user;
+    return await this.userService.isAdmin(user['id']);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Patch('follow/:followedUserId')
+  async followUser(
+    @Req() req: Request,
+    @Param('followedUserId') followedUserId: string,
+  ) {
+    const user = req.user;
+    return await this.userService.followUser(user['id'], followedUserId);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Patch('unfollow/:unfollowedUserId')
+  async unfollowUser(
+    @Req() req: Request,
+    @Param('unfollowedUserId') unfollowedUserId: string,
+  ) {
+    const user = req.user;
+    return await this.userService.unfollowUser(user['id'], unfollowedUserId);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Patch('posts/:postId')
+  async storePosts(@Req() req: Request, @Param('postId') postId: string) {
+    const user = req.user;
+    return await this.userService.posts(user['id'], postId);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Patch('penndingPosts/:penddingPostId')
+  async storePenndingPosts(@Req() req: Request, @Param('penddingPostId') postId: string) {
+    const user = req.user;
+    return await this.userService.posts(user['id'], postId);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Patch('bookmark/:postId')
+  async bookmarkPosts(@Req() req: Request, @Param('postId') postId: string) {
+    const user = req.user;
+    return await this.userService.bookmarkPosts(user['id'], postId);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Patch('unbookmark/:postId')
+  async unbookmarkPosts(@Req() req: Request, @Param('postId') postId: string) {
+    const user = req.user;
+    return await this.userService.unbookmarkPosts(user['id'], postId);
   }
 
   @UseGuards(AuthGuard('jwt'))
@@ -46,55 +170,7 @@ export class UserController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Patch('follow/:followedUserId')
-  async followUser(
-    @Req() req: Request,
-    @Param('followedUserId') followedUserId: string,
-  ) {
-    const user = req.user;
-    await this.userService.followUser(user['id'], followedUserId);
-  }
-
-  @UseGuards(AuthGuard('jwt'))
-  @Delete('unfollow/:unfollowedUserId')
-  async unfollowUser(
-    @Req() req: Request,
-    @Param('unfollowedUserId') unfollowedUserId: string,
-  ) {
-    const user = req.user;
-    await this.userService.unfollowUser(user['id'], unfollowedUserId);
-  }
-
-  @UseGuards(AuthGuard('jwt'))
-  @Get('followers')
-  async getUserFollowers(@Req() req: Request): Promise<string[]> {
-    const user = req.user;
-    return this.userService.getUserFollowers(user['id']);
-  }
-
-  @UseGuards(AuthGuard('jwt'))
-  @Get(':id/following')
-  async getUserFollowing(@Req() req: Request): Promise<string[]> {
-    const user = req.user;
-    return this.userService.getUserFollowing(user['id']);
-  }
-
-  @UseGuards(AuthGuard('jwt'))
-  @Patch('posts/:postId')
-  async storePosts(@Req() req: Request, @Param('postId') postId: string) {
-    const user = req.user;
-    await this.userService.posts(user['id'], postId);
-  }
-
-  @UseGuards(AuthGuard('jwt'))
-  @Patch(':id/posts/:postId')
-  async bookmarkPosts(@Req() req: Request, @Param('postId') postId: string) {
-    const user = req.user;
-    await this.userService.bookmarkPosts(user['id'], postId);
-  }
-
-  @UseGuards(AuthGuard('jwt'))
-  @Post('upload')
+  @Post('/image')
   @UseInterceptors(
     FileInterceptor('image', {
       storage: diskStorage({
@@ -127,21 +203,9 @@ export class UserController {
 
       return await this.userService.updateUser(user['id'], {
         profilePicture: response.profilePicture,
-      });
+      }, );
     }
   }
 
-  @UseGuards(AuthGuard('jwt'))
-  @Patch('isJournal')
-  async journal(@Req() req: Request): Promise<any> {
-    const user = req.user;
-    return await this.userService.isJournal(user['id']);
-  }
-
-  @UseGuards(AuthGuard('jwt'))
-  @Patch('isAdmin')
-  async admin(@Req() req: Request): Promise<any> {
-    const user = req.user;
-    return await this.userService.isJournal(user['id']);
-  }
+  
 }

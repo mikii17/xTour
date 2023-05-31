@@ -23,20 +23,22 @@ import { MongooseModule } from '@nestjs/mongoose';
     UserModule,
     AuthModule,
     JournalModule,
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'images'),
-    }),
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'images', 'users'),
-    }),
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'images', 'imagess'),
-    }),
+    // ServeStaticModule.forRoot({
+    //   rootPath: join(__dirname, '..', 'images', 'pending'),
+    // }),
+    // ServeStaticModule.forRoot({
+    //   rootPath: join(__dirname, '..', 'images', 'imagess'),
+    // }),
+    // ServeStaticModule.forRoot({
+    //   rootPath: join(__dirname, '..', 'images'),
+    // }),
   ],
   controllers: [AppController],
-  providers: [AppService, {
-    provide: APP_GUARD,
-    useClass: RolesGuard,
-  },],
+  providers: [AppService, 
+  //   {
+  //   provide: APP_GUARD,
+  //   useClass: RolesGuard,
+  // },
+],
 })
 export class AppModule {}

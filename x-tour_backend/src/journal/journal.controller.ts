@@ -12,6 +12,7 @@ import {
   UploadedFile,
   ValidationPipe,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express/multer';
 import { diskStorage } from 'multer';
@@ -23,6 +24,7 @@ import { Journal } from './Schemas/journal.schema';
 import { Roles } from 'src/auth/Decorator/roles.decorator';
 import { Role } from 'src/auth/enum/role.enum';
 import { AuthGuard } from '@nestjs/passport';
+import { RolesGuard } from 'src/auth/guard/roles.guard';
 
 @Controller('journals')
 export class JournalController {
@@ -33,15 +35,15 @@ export class JournalController {
     return await this.journalService.getApprovedJournals(queryString);
   }
   
-  @UseGuards(AuthGuard('jwt'))
   @Roles(Role.Journalist, Role.Admin)
-  @Get('pending')
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Get('/pending')
   async getPendingJournals(@Query() querystring: QueryStringDto) {
     return await this.journalService.getPendingJournals(querystring);
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Roles(Role.Journalist, Role.Admin)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Get('pending/:id')
   async getPendingJournal(@Param('id') id: string) {
     return await this.journalService.getPendingJournal(id);
@@ -51,25 +53,19 @@ export class JournalController {
   async getApprovedJournal(@Param('id') id: string) {
     return await this.journalService.getApprovedJournal(id);
   }
- 
-  @UseGuards(AuthGuard('jwt'))
-  @Roles(Role.Admin)
-  @Post()
-  async approveJournal(@Body() body: { id: string; journal: Journal }) {
-    return await this.journalService.approveJournal(body.id, body.journal);
-  }
 
-  @UseGuards(AuthGuard('jwt'))
   @Roles(Role.Journalist)
-  @Post('Pending')
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Post('/pending')
   @UsePipes(new ValidationPipe({ transform: true }))
-  async createJournal(@Body() body: CreateJournalDto) {
+  async createJournal(@Req() req, @Body() body: CreateJournalDto) {
     const user = req.user;
     return await this.journalService.createJournal(user['id'], body);
   }
+ 
 
-  @UseGuards(AuthGuard('jwt'))
   @Roles(Role.Journalist)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Post('pending/image/:id')
   @UseInterceptors(
     FileInterceptor('image', {
@@ -87,13 +83,8 @@ export class JournalController {
   async uploadPendingFile(
     @UploadedFile() file: Express.Multer.File,
     @Param('id') id: string,
-  ) {
-    await this.journalService.insertImageOnPending(id, `pending/${file.filename}`);
-    const response = {
-      originalname: file.originalname,
-      filename: `pending/${file.filename}`,
-    };
-    return response;
+  ):Promise<Journal> {
+    return await this.journalService.insertImageOnPending(id, `pending/${file.filename}`);
   }
 
   @Post('image/:id')
@@ -122,299 +113,38 @@ export class JournalController {
     return response;
   }
 
-  @UseGuards(AuthGuard('jwt'))
+  @Roles(Role.Admin)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Post('/:id')
+  async approveJournal(@Body() body: Journal ,@Param('id') id) {
+    return await this.journalService.approveJournal(id, body);
+  }
+
   @Roles(Role.Journalist)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Patch('pending/:id')
   async updatePendingJournal(@Param('id') id: string, @Body() body) {
     return await this.journalService.updatePendingJournal(id, body);
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Roles(Role.Journalist, Role.Admin)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Patch('/:id')
   async updateApprovedJournal(@Param('id') id: string, @Body() body) {
     return await this.journalService.updateApprovedJournal(id, body);
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Roles(Role.Journalist, Role.Admin)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Delete('pending/:id')
-  async deletePendingJournal(@Param('id') id: string) {
-    return this.journalService.deletePendingJournal(id);
+  async deletePendingJournal(@Param('id') id: string, @Req() req) {
+    return this.journalService.deletePendingJournal(id, req.user['id']);
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Roles(Role.Journalist, Role.Admin)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Delete('/:id')
-  async deleteApprovedJournal(@Param('id') id: string) {
-    return this.journalService.deleteApprovedJournal(id);
+  async deleteApprovedJournal(@Param('id') id: string, @Req() req) {
+    return this.journalService.deleteApprovedJournal(id, req.user['id']);
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
