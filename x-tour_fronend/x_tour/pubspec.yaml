@@ -41,6 +41,7 @@ dependencies:
   go_router: ^7.1.1
   dotted_border: ^2.0.0+3
   dots_indicator: ^3.0.0
+  google_fonts: ^4.0.4
   
 
 dev_dependencies:

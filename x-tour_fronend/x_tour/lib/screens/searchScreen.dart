@@ -68,122 +68,119 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: ThemeData.dark(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Center(child: Text('X-tour Search')),
-        ),
-        body: Column(
-          children: [
-            SizedBox(height: 16),
-            Container(
-              margin: const EdgeInsets.only(left: 20, right: 20),
-              child: CustomTextField(
-                labelText: 'Search',
-                prefixIcon: Icons.search,
-                onChanged: (text) {},
-                borderRadius: 20,
-                height: 35,
-              ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Center(child: Text('X-tour Search')),
+      ),
+      body: Column(
+        children: [
+          SizedBox(height: 16),
+          Container(
+            margin: const EdgeInsets.only(left: 20, right: 20),
+            child: CustomTextField(
+              labelText: 'Search',
+              prefixIcon: Icons.search,
+              onChanged: (text) {},
+              borderRadius: 20,
+              height: 35,
             ),
-            SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      isAccount = false;
-                      isTop = true;
-                      isJournal = false;
-                      isPost = false;
-                    });
-                  },
-                  child: Text(
-                    'Top',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: isTop ? Colors.blue : Colors.white,
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      isAccount = true;
-                      isTop = false;
-                      isJournal = false;
-                      isPost = false;
-                    });
-                  },
-                  child: Text(
-                    'Accounts',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: isAccount ? Colors.blue : Colors.white,
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      isAccount = false;
-                      isTop = false;
-                      isJournal = false;
-                      isPost = true;
-                    });
-                  },
-                  child: Text(
-                    'Posts',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: isPost ? Colors.blue : Colors.white,
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      isAccount = false;
-                      isTop = false;
-                      isJournal = true;
-                      isPost = false;
-                    });
-                  },
-                  child: Text(
-                    'Journal',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: isJournal ? Colors.blue : Colors.white,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 16),
-            Expanded(
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                ),
-                itemCount: _getActiveImageList().length,
-                itemBuilder: (BuildContext context, int index) {
-                  final String imagePath = _getActiveImageList()[index];
-
-                  return Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(imagePath),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  );
+          ),
+          SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    isAccount = false;
+                    isTop = true;
+                    isJournal = false;
+                    isPost = false;
+                  });
                 },
+                child: Text(
+                  'Top',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: isTop ? Colors.blue : Colors.white,
+                  ),
+                ),
               ),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    isAccount = true;
+                    isTop = false;
+                    isJournal = false;
+                    isPost = false;
+                  });
+                },
+                child: Text(
+                  'Accounts',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: isAccount ? Colors.blue : Colors.white,
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    isAccount = false;
+                    isTop = false;
+                    isJournal = false;
+                    isPost = true;
+                  });
+                },
+                child: Text(
+                  'Posts',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: isPost ? Colors.blue : Colors.white,
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    isAccount = false;
+                    isTop = false;
+                    isJournal = true;
+                    isPost = false;
+                  });
+                },
+                child: Text(
+                  'Journal',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: isJournal ? Colors.blue : Colors.white,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 16),
+          Expanded(
+            child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+              ),
+              itemCount: _getActiveImageList().length,
+              itemBuilder: (BuildContext context, int index) {
+                final String imagePath = _getActiveImageList()[index];
+
+                return Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(imagePath),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                );
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

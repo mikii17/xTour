@@ -8,9 +8,9 @@ class FollowerScreen extends StatefulWidget {
 }
 
 class _FollowerScreenState extends State<FollowerScreen> {
+  final List<String> usernames = ["zele", "mike", "leul"];
+  final List<String> names = ["zelalem", "michael", "leul"];
 
-  final List usernames = ["zele","mike","leul"];
-  final List names = ["zelalem", "michael","leul"];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,7 +19,7 @@ class _FollowerScreenState extends State<FollowerScreen> {
       ),
       body: ListView.separated(
         padding: const EdgeInsets.all(20),
-        itemCount: usernames.length, // Set the number of items in the list
+        itemCount: usernames.length,
         itemBuilder: (BuildContext context, int index) {
           return Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -53,18 +53,67 @@ class _FollowerScreenState extends State<FollowerScreen> {
                   )
                 ],
               ),
-              ElevatedButton(
-                onPressed: () {},
-                child: Text('Follow Back'),
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.green,
-                ),
-              ),
+              // ElevatedButton(
+              //   onPressed: () {
+              //     showDialog(
+              //       context: context,
+              //       builder: (BuildContext context) {
+              //         return Dialog(
+              //           child: Container(
+              //             padding: const EdgeInsets.all(20),
+              //             child: Column(
+              //               mainAxisSize: MainAxisSize.min,
+              //               children: [
+              //                 Text(
+              //                   'Followers',
+              //                   style: TextStyle(
+              //                     fontSize: 18,
+              //                     fontWeight: FontWeight.bold,
+              //                   ),
+              //                 ),
+              //                 SizedBox(height: 20),
+              //                 ListView.separated(
+              //                   shrinkWrap: true,
+              //                   physics: NeverScrollableScrollPhysics(),
+              //                   itemCount: usernames.length,
+              //                   itemBuilder: (BuildContext context, int index) {
+              //                     return ListTile(
+              //                       leading: CircleAvatar(
+              //                         maxRadius: 20,
+              //                         backgroundColor: Colors.black,
+              //                         child: Icon(
+              //                           Icons.person,
+              //                           color: Colors.white,
+              //                           size: 25,
+              //                         ),
+              //                       ),
+              //                       title: Text(usernames[index]),
+              //                       subtitle: Text(names[index]),
+              //                     );
+              //                   },
+              //                   separatorBuilder:
+              //                       (BuildContext context, int index) {
+              //                     return SizedBox(height: 10);
+              //                   },
+              //                 ),
+              //               ],
+              //             ),
+              //           ),
+              //         );
+              //       },
+              //     );
+              //   },
+              //   child: Text('Follow Back'),
+              //   style: ElevatedButton.styleFrom(
+              //     primary: Colors.green,
+              //   ),
+              // ),
             ],
           );
-        }, separatorBuilder: (BuildContext context, int index) { 
-          return SizedBox(height: 10,);
-         },
+        },
+        separatorBuilder: (BuildContext context, int index) {
+          return SizedBox(height: 10);
+        },
       ),
     );
   }

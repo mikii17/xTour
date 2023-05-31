@@ -42,9 +42,11 @@ class PostState extends State<PostCard> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       width: double.infinity,
-      decoration: const BoxDecoration(color: Color.fromARGB(255, 80, 78, 78)),
+      // color: theme.cardColor,
+      // decoration: const BoxDecoration(color: theme.cardColor),
       // padding: const EdgeInsets.all(10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,7 +56,7 @@ class PostState extends State<PostCard> {
           ),
          Container(
     decoration: BoxDecoration(
-      color: Color.fromARGB(255, 98, 97, 96),
+      color: theme.cardColor,
       borderRadius: BorderRadius.circular(20.0),
     ),
     // padding: EdgeInsets.all(10),
@@ -67,10 +69,7 @@ class PostState extends State<PostCard> {
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
           child: Text(
             "Here's an example that adds 16 pixels of vertical padding and 32 pixels of horizontal padding.",
-            style: TextStyle(
-              color: Color.fromARGB(255, 242, 239, 239),
-              fontSize: 13,
-            ),
+            style: theme.textTheme.bodyMedium,
           ),
         ),
         SizedBox(height: 10),
@@ -125,10 +124,7 @@ class PostState extends State<PostCard> {
               SizedBox(width: 20),
               Text(
                 'liked by Abebech and 120 others',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Color.fromARGB(255, 251, 249, 249),
-                ),
+                style: theme.textTheme.bodySmall,
               ),
             ],
           ),
@@ -148,18 +144,12 @@ class PostState extends State<PostCard> {
                 if (!showAdditionalText)
                   Text(
                     'View description',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Color.fromARGB(255, 240, 237, 237),
-                    ),
+                    style: Theme.of(context).textTheme.bodySmall,
                   ),
                 if (showAdditionalText)
                   Text(
                     'these are the the things I saw in behamas the one thing I saw is that they always like to cheat on their mate and dont even feel ashamed at all',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Color.fromARGB(255, 184, 184, 185),
-                    ),
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
               ],
             ),
@@ -307,33 +297,16 @@ Widget photoList() {
 
 
   Widget iconBuilder(iconData) {
-    return ShaderMask(
-      shaderCallback: (Rect bounds) {
-        return const LinearGradient(
-          colors: [
-            Color.fromARGB(255, 97, 38, 234),
-            Color.fromARGB(255, 19, 158, 180)
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          stops: [0.3, 0.75],
-        ).createShader(bounds);
-      },
-      child: Icon(
-        iconData,
-        size: 30,
-        color: Colors.white,
-      ),
+    return Icon(
+      iconData,
+      size: 30,
     );
   }
 
   Widget commentBuilder(commentText) {
     return Text(
       commentText,
-      style: TextStyle(
-        fontSize: 13,
-        color: const Color.fromARGB(255, 177, 169, 169),
-      ),
+      style: Theme.of(context).textTheme.bodySmall,
       overflow: TextOverflow.fade,
       maxLines: 1,
     );

@@ -166,113 +166,110 @@ class _EditPendingPostScreenState extends State<EditPendingPostScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: ThemeData.dark(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: Center(child: const Text('Create Post')),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.check),
-              onPressed: _isPosting ? null : _handlePost,
-            ),
-          ],
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextFormField(
-                controller: _storyController,
-                decoration: InputDecoration(
-                    labelText: 'Story',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                      borderSide: BorderSide(color: Colors.blue),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                      borderSide: BorderSide(color: Colors.blue),
-                    ),
-                    filled: true,
-                    contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 12.0),
-                    errorText: _storyError),
-              ),
-              const SizedBox(height: 16.0),
-              TextField(
-                controller: _descriptionController,
-                maxLines: 3,
-                decoration: InputDecoration(
-                    hintText: 'Add a description...',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                      borderSide: BorderSide(color: Colors.blue),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                      borderSide: BorderSide(color: Colors.blue),
-                    ),
-                    filled: true,
-                    contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 12.0),
-                    errorText: _descriptionError),
-              ),
-              const SizedBox(height: 16.0),
-              Center(
-                child: Column(children: [
-                  SizedBox(
-                    height: 100,
-                  ),
-                  GestureDetector(
-                    onTap: () => _buildgetMode(context),
-                    child: Container(
-                      child: Stack(
-                        children: [
-                          DottedBorder(
-                            strokeWidth: 2,
-                            color: Colors.blue,
-                            dashPattern: [4, 4],
-                            borderType: BorderType.Circle,
-                            radius: Radius.circular(8),
-                            child: Container(
-                              width: 120,
-                              height: 120,
-                            ),
-                          ),
-                          const Positioned(
-                            top: 30,
-                            left: 40,
-                            child: Text(
-                              'Image',
-                              style: TextStyle(fontSize: 18),
-                            ),
-                          ),
-                          const Positioned(
-                            top: 60,
-                            left: 40,
-                            child: Icon(
-                              Icons.add,
-                              size: 48,
-                              color: Colors.yellow,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ]),
-              ),
-              const SizedBox(height: 16.0),
-              if (_selectedImages.isNotEmpty)
-                Expanded(
-                  child: _buildImagePreview(),
-                )
-              // else
-              //   const Text('No images selected'),
-            ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Center(child: const Text('Create Post')),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.check),
+            onPressed: _isPosting ? null : _handlePost,
           ),
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextFormField(
+              controller: _storyController,
+              decoration: InputDecoration(
+                  labelText: 'Story',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: BorderSide(color: Colors.blue),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: BorderSide(color: Colors.blue),
+                  ),
+                  filled: true,
+                  contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 12.0),
+                  errorText: _storyError),
+            ),
+            const SizedBox(height: 16.0),
+            TextField(
+              controller: _descriptionController,
+              maxLines: 3,
+              decoration: InputDecoration(
+                  hintText: 'Add a description...',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: BorderSide(color: Colors.blue),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: BorderSide(color: Colors.blue),
+                  ),
+                  filled: true,
+                  contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 12.0),
+                  errorText: _descriptionError),
+            ),
+            const SizedBox(height: 16.0),
+            Center(
+              child: Column(children: [
+                SizedBox(
+                  height: 100,
+                ),
+                GestureDetector(
+                  onTap: () => _buildgetMode(context),
+                  child: Container(
+                    child: Stack(
+                      children: [
+                        DottedBorder(
+                          strokeWidth: 2,
+                          color: Colors.blue,
+                          dashPattern: [4, 4],
+                          borderType: BorderType.Circle,
+                          radius: Radius.circular(8),
+                          child: Container(
+                            width: 120,
+                            height: 120,
+                          ),
+                        ),
+                        const Positioned(
+                          top: 30,
+                          left: 40,
+                          child: Text(
+                            'Image',
+                            style: TextStyle(fontSize: 18),
+                          ),
+                        ),
+                        const Positioned(
+                          top: 60,
+                          left: 40,
+                          child: Icon(
+                            Icons.add,
+                            size: 48,
+                            color: Colors.yellow,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ]),
+            ),
+            const SizedBox(height: 16.0),
+            if (_selectedImages.isNotEmpty)
+              Expanded(
+                child: _buildImagePreview(),
+              )
+            // else
+            //   const Text('No images selected'),
+          ],
         ),
       ),
     );

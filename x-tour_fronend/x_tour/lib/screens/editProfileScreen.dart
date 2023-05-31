@@ -44,118 +44,115 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: ThemeData.dark(),
-      child: Scaffold(
-        appBar: AppBar(
-          leading: Row(
-            children: [
-              IconButton(
-                icon: Icon(Icons.close),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Text(
-                'Edit Profile',
-                style: TextStyle(fontSize: 20),
-              )
-            ],
-          ),
-          actions: [
+    return Scaffold(
+      appBar: AppBar(
+        leading: Row(
+          children: [
             IconButton(
-              icon: Icon(Icons.check),
+              icon: Icon(Icons.close),
               onPressed: () {
-                // Save changes logic here
+                Navigator.pop(context);
               },
             ),
+            SizedBox(
+              width: 10,
+            ),
+            Text(
+              'Edit Profile',
+              style: TextStyle(fontSize: 20),
+            )
           ],
         ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 20,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.check),
+            onPressed: () {
+              // Save changes logic here
+            },
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 20,
+              ),
+              Center(
+                child: GestureDetector(
+                  onTap: () {
+                    // Edit picture logic here
+                    _editPicture();
+                  },
+                  child: profile_avatar(
+                    radius: 100,
+                    // Replace with your profile picture image provider
+                    imageUrl: widget.imageurl,
+                  ),
                 ),
-                Center(
-                  child: GestureDetector(
-                    onTap: () {
-                      // Edit picture logic here
-                      _editPicture();
-                    },
-                    child: profile_avatar(
-                      radius: 100,
-                      // Replace with your profile picture image provider
-                      imageUrl: widget.imageurl,
+              ),
+              SizedBox(height: 16.0),
+              Center(
+                child: GestureDetector(
+                  onTap: () {
+                    // Edit picture logic here
+                    _editPicture();
+                  },
+                  child: Text(
+                    'Edit Picture',
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontSize: 16,
                     ),
                   ),
                 ),
-                SizedBox(height: 16.0),
-                Center(
-                  child: GestureDetector(
-                    onTap: () {
-                      // Edit picture logic here
-                      _editPicture();
-                    },
-                    child: Text(
-                      'Edit Picture',
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
+              ),
+              SizedBox(height: 50.0),
+              Text(
+                'Name',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16.0,
                 ),
-                SizedBox(height: 50.0),
-                Text(
-                  'Name',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16.0,
-                  ),
+              ),
+              TextFormField(
+                controller: _nameController,
+                decoration: InputDecoration(
+                  hintText: 'Enter your name',
                 ),
-                TextFormField(
-                  controller: _nameController,
-                  decoration: InputDecoration(
-                    hintText: 'Enter your name',
-                  ),
+              ),
+              SizedBox(height: 16.0),
+              Text(
+                'Username',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16.0,
                 ),
-                SizedBox(height: 16.0),
-                Text(
-                  'Username',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16.0,
-                  ),
+              ),
+              TextFormField(
+                controller: _usernameController,
+                decoration: InputDecoration(
+                  hintText: 'Enter your username',
                 ),
-                TextFormField(
-                  controller: _usernameController,
-                  decoration: InputDecoration(
-                    hintText: 'Enter your username',
-                  ),
+              ),
+              SizedBox(height: 16.0),
+              Text(
+                'Password',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16.0,
                 ),
-                SizedBox(height: 16.0),
-                Text(
-                  'Password',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16.0,
-                  ),
+              ),
+              TextFormField(
+                controller: _passwordController,
+                decoration: InputDecoration(
+                  hintText: 'Enter your password',
                 ),
-                TextFormField(
-                  controller: _passwordController,
-                  decoration: InputDecoration(
-                    hintText: 'Enter your password',
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

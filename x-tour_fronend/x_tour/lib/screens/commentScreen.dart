@@ -253,10 +253,7 @@ class _XtourCommentSectionState extends State<XtourCommentSection> {
                                 comment.folded
                                     ? 'View ${comment.replies.length} replies'
                                     : 'Hide replies',
-                                style: TextStyle(
-                                  color: Colors.grey[600],
-                                  fontSize: 12,
-                                ),
+                                style: Theme.of(context).textTheme.bodySmall,
                               ),
                             ),
                           ),
@@ -276,7 +273,7 @@ class _XtourCommentSectionState extends State<XtourCommentSection> {
               borderRadius: BorderRadius.circular(20),
               color: Colors.transparent,
               border: Border.all(
-                color: Colors.grey,
+                color: Theme.of(context).primaryColor,
                 width: 1.0,
               ),
             ),

@@ -16,11 +16,14 @@ class _JournalListScreenState extends State<JournalListScreen> {
       appBar: AppBar(
         title: Text('Journal List'),
       ),
-      body: ListView.builder(
+      body: ListView.separated(
         itemCount: 6,
         itemBuilder: (context, index) {
           // final post = posts[index];
           return journalCard();
+        },
+        separatorBuilder: (context, index) {
+          return SizedBox(height: 20,);
         },
       ),
     );

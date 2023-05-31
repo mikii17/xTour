@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:x_tour/custom/custom.dart';
 import 'package:x_tour/routes/route_constants.dart';
 import '../routes/router.dart';
 import '../custom/custom_button.dart';
@@ -63,6 +64,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       'link': 'https://example.com/card3',
     },
   ];
+  final List<String> usernames = ["zele", "mike", "leul","Abiy","Roman","Selam",];
+  final List<String> names = ["zelalem", "michael", "leul","abi","Romi","Seli",];
 
   List postImages = [
     "assets/food_brussels_sprouts.jpg",
@@ -99,73 +102,63 @@ class _ProfileScreenState extends State<ProfileScreen> {
   ];
 
 
-void _showPopupMenu() {
-    final RenderBox overlay =
-        Overlay.of(context)!.context.findRenderObject() as RenderBox;
-    final RenderBox popupButton = context.findRenderObject() as RenderBox;
-    final offset = popupButton.localToGlobal(Offset.zero, ancestor: overlay);
+// void _showPopupMenu() {
 
-    showMenu(
-      context: context,
-       position: RelativeRect.fromLTRB(
-        offset.dx + popupButton.size.width / 2,
-        offset.dy + popupButton.size.height / 2,
-        offset.dx + popupButton.size.width,
-        offset.dy + popupButton.size.height / 2,
-      ),
-      items: [
-        PopupMenuItem(
-          child: ListTile(
-            leading: Icon(Icons.edit),
-            title: Text('Edit Pending Post'),
-            onTap: () {
-              GoRouter.of(context).go('/profile/editPendingPost');
-            },
-          ),
-        ),
-        PopupMenuItem(
-          child: ListTile(
-            leading: Icon(Icons.edit),
-            title: Text('Edit Pending Journal'),
-            onTap: () {
-              GoRouter.of(context).go('/profile/editPendingJournal');
-            },
-          ),
-        ),
-        PopupMenuItem(
-          child: ListTile(
-            leading: Icon(Icons.brightness_medium),
-            title: DropdownButton<String>(
-              value: isDarkTheme ? 'Dark Theme' : 'Light Theme',
-              onChanged: (String? value) {
-                setState(() {
-                  isDarkTheme = !isDarkTheme; // Toggle the theme
-                  // Apply theme logic here, e.g., using ThemeProvider package or custom logic
-                  // You can set the dark theme based on the value of isDarkTheme
-                });
-              },
-              items: <String>['Light Theme', 'Dark Theme'].map((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-            ),
-          ),
-        ),
-        PopupMenuItem(
-          child: ListTile(
-            leading: Icon(Icons.logout),
-            title: Text('Logout'),
-            onTap: () {
-              // Handle logout
-              Navigator.pop(context);
-            },
-          ),
-        ),
-      ],
-    );
-  }
+
+   
+//       items: [
+//         PopupMenuItem(
+//           child: ListTile(
+//             leading: Icon(Icons.edit),
+//             title: Text('Edit Pending Post'),
+//             onTap: () {
+//               GoRouter.of(context).go('/profile/editPendingPost');
+//             },
+//           ),
+//         ),
+//         PopupMenuItem(
+//           child: ListTile(
+//             leading: Icon(Icons.edit),
+//             title: Text('Edit Pending Journal'),
+//             onTap: () {
+//               GoRouter.of(context).go('/profile/editPendingJournal');
+//             },
+//           ),
+//         ),
+//         PopupMenuItem(
+//           child: ListTile(
+//             leading: Icon(Icons.brightness_medium),
+//             title: DropdownButton<String>(
+//               value: isDarkTheme ? 'Dark Theme' : 'Light Theme',
+//               onChanged: (String? value) {
+//                 setState(() {
+//                   isDarkTheme = !isDarkTheme; // Toggle the theme
+//                   // Apply theme logic here, e.g., using ThemeProvider package or custom logic
+//                   // You can set the dark theme based on the value of isDarkTheme
+//                 });
+//               },
+//               items: <String>['Light Theme', 'Dark Theme'].map((String value) {
+//                 return DropdownMenuItem<String>(
+//                   value: value,
+//                   child: Text(value),
+//                 );
+//               }).toList(),
+//             ),
+//           ),
+//         ),
+//         PopupMenuItem(
+//           child: ListTile(
+//             leading: Icon(Icons.logout),
+//             title: Text('Logout'),
+//             onTap: () {
+//               // Handle logout
+//               Navigator.pop(context);
+//             },
+//           ),
+//         ),
+//       ],
+//     );
+//   }
 
 
   @override
@@ -200,76 +193,36 @@ void _showPopupMenu() {
   }
 
   Widget build(BuildContext context) {
-    return Theme(
-      data: ThemeData.dark(), // Set the theme to dark
-      child: Scaffold(
-        appBar: AppBar(
-          actions: [
-            IconButton(
-              icon: Icon(Icons.menu),
-              onPressed: _showPopupMenu,
-            ),
-          ],
-
-        ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 10,
-                  ),
-                 const Text(
-                    'Username',
-                    style: TextStyle(
-                      fontSize: 17.0,
-                      fontWeight: FontWeight.bold,
+    return Scaffold(
+      appBar: XTourAppBar(
+        title: 'Dani',
+        showActionIcon: IconButton(
+            icon: Icon(Icons.menu),
+            onPressed: (){
+          showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return Dialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
                     ),
-                  ),
-                         
-                  SizedBox(height: 25.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                       GestureDetector(
-                        onTap: () {
-                          GoRouter.of(context).go('/profile/follower');
-                        },
-                        child: Column(
-                          children: [
-                            Text(
-                              '456K', // Replace with actual follower count
-                              style: TextStyle(
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 4.0),
-                            Text(
-                              'Followers',
-                              style: TextStyle(
-                                fontSize: 16.0,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Column(
-                        children: [  
-                          Container(
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      alignment: Alignment.topCenter,
+                      children: [
+                        Positioned(
+                          top: -35,
+                          child: Container(
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               border: Border.all(
-                                color: Colors
-                                    .red, // Replace with your desired border color
+                                color: Color.fromARGB(255, 14, 201,
+                                    55), // Replace with your desired border color
                                 width: 3, // Adjust the width of the border
                               ),
                             ),
                             child: CircleAvatar(
-                              radius: 30.0,
+                              radius: 35.0,
                               backgroundImage: NetworkImage(
                                   ''), // Replace with actual image URL
                               child: Icon(
@@ -277,188 +230,446 @@ void _showPopupMenu() {
                               ),
                             ),
                           ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(20),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SizedBox(
+                                height: 15,
+                              ),
+                              SizedBox(
+                                height: 15,
+                              ),
+                              Text(
+                                'Username', // Replace with actual username
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 6,
+                              ),
+                              Text(
+                                'Name', // Replace with actual name
+                                style: TextStyle(
+                                  fontSize: 16,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 15,
+                              ),
+                              PopupMenuItem(
+                                child: ListTile(
+                                  leading: Icon(Icons.hourglass_bottom),
+                                  title: Text('Pending Post'),
+                                  onTap: () {
+                                    GoRouter.of(context)
+                                        .go('/profile/editPendingPost');
+                                  },
+                                ),
+                              ),
+                              PopupMenuItem(
+                                child: ListTile(
+                                  leading: Icon(Icons.pending_actions),
+                                  title: Text('Pending Journal'),
+                                  onTap: () {
+                                    GoRouter.of(context)
+                                        .go('/profile/editPendingJournal');
+                                  },
+                                ),
+                              ),
+                              PopupMenuItem(
+                                child: ListTile(
+                                  leading: Icon(Icons.logout),
+                                  title: Text('Logout'),
+                                  onTap: () {
+                                    // Handle logout
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              );
 
-                          SizedBox(height: 16.0),
-                          
+            }
+          ),
+        ),
+      
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 10,
+                ),
+               const Text(
+                  'Username',
+                  style: TextStyle(
+                    fontSize: 17.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                       
+                SizedBox(height: 25.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                     GestureDetector(
+                      onTap: () {
+                       showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Dialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Container(
+                                height: 500,
+                              
+                                padding: const EdgeInsets.all(20),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      'Followers',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    SizedBox(height: 20),
+                                    Expanded(
+                                      child: ListView.builder(
+                                        itemCount: usernames.length,
+                                        itemBuilder: (BuildContext context,
+                                            int index) {
+                                          return ListTile(
+                                            leading: CircleAvatar(
+                                              maxRadius: 20,
+                                              backgroundColor: Colors.black,
+                                              child: Icon(
+                                                Icons.person,
+                                                color: Colors.white,
+                                                size: 25,
+                                              ),
+                                            ),
+                                            title: Text(usernames[index]),
+                                            subtitle: Text(names[index]),
+                                            trailing: ElevatedButton(
+                                              onPressed: () {
+                                                // Perform the follow back action here
+                                              },
+                                              child: Text('Follow Back'),
+                                              style: ElevatedButton.styleFrom(
+                                                primary: Colors.green,
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 12),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+
+                      },
+                      child: Column(
+                        children: [
+                          Text(
+                            '456K', // Replace with actual follower count
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 4.0),
+                          Text(
+                            'Followers',
+                            style: TextStyle(
+                              fontSize: 16.0,
+                            ),
+                          ),
                         ],
                       ),
-                      
-                      GestureDetector(
-                        onTap: () {
-                          GoRouter.of(context).go('/profile/following');
-                        },
-                        child: Column(
-                          children: [
-                            Text(
-                              '789', // Replace with actual following count
-                              style: TextStyle(
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold,
-                              ),
+                    ),
+                    Column(
+                      children: [  
+                        Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: Colors
+                                  .red, // Replace with your desired border color
+                              width: 3, // Adjust the width of the border
                             ),
-                            SizedBox(height: 4.0),
-                            Text(
-                              'Following',
-                              style: TextStyle(
-                                fontSize: 16.0,
-                              ),
+                          ),
+                          child: CircleAvatar(
+                            radius: 30.0,
+                            backgroundImage: NetworkImage(
+                                ''), // Replace with actual image URL
+                            child: Icon(
+                              Icons.person,
                             ),
-                          ],
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 16.0),
-                  // CustomButton(
-                  //   text: "Edit Profile",
-                  //   onPressed: () {
-                  //     GoRouter.of(context).go('/profile/editProfile');
-                  //   },
-                  //   textColor: Colors.black,
-                  //   backgroundGradient: const [
-                  //     Colors.white,
-                  //     Colors.white,
-                  //   ],
-                  //   width: 150,
-                  // ),
 
-                ],
-              ),
-            ),
-            const Divider(
-              height: 1.0,
-              color: Colors.grey,
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      showPost = true;
-                      showPostJournal = false;
-                      showBookmark = false;
-                      postIconColor = Colors.blue;
-                      postJournalIconColor = Colors.grey;
-                      bookmarkColor = Colors.grey;
-                    });
-                  },
-                  child: Icon(
-                    Icons.photo_library,
-                    color: postIconColor,
-                  ),
+                        SizedBox(height: 16.0),
+                        
+                      ],
+                    ),
+                    
+                    GestureDetector(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Dialog(
+                               shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                ),
+                              child: Container(
+                                height: 500,
+                                width: 600,
+                                padding: const EdgeInsets.all(20),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      'Following',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    SizedBox(height: 20),
+                                    Expanded(
+                                      child: ListView.builder(
+                                        itemCount: usernames.length,
+                                        itemBuilder: (BuildContext context,
+                                            int index) {
+                                          return ListTile(
+                                            leading: CircleAvatar(
+                                              maxRadius: 20,
+                                              backgroundColor: Colors.black,
+                                              child: Icon(
+                                                Icons.person,
+                                                color: Colors.white,
+                                                size: 25,
+                                              ),
+                                            ),
+                                            title: Text(usernames[index]),
+                                            subtitle: Text(names[index]),
+                                            trailing: ElevatedButton(
+                                              onPressed: () {
+                                                // Perform the follow back action here
+                                              },
+                                              child: Text('Unfollow'),
+                                              style: ElevatedButton.styleFrom(
+                                                primary: Colors.green,
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 12),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+
+                      },
+                      child: Column(
+                        children: [
+                          Text(
+                            '789', // Replace with actual following count
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 4.0),
+                          Text(
+                            'Following',
+                            style: TextStyle(
+                              fontSize: 16.0,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      showBookmark = false;
-                      showPost = false;
-                      showPostJournal = true;
-                      postIconColor = Colors.grey;
-                      postJournalIconColor = Colors.blue;
-                      bookmarkColor = Colors.grey;
-                    });
-                  },
-                  child: Icon(
-                    Icons.article_outlined,
-                    color: postJournalIconColor,
-                  ),
-                ),
-                
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      showBookmark = true;
-                      showPost = false;
-                      showPostJournal = false;
-                      postIconColor = Colors.grey;
-                      postJournalIconColor = Colors.grey;
-                      bookmarkColor = Colors.blue;
-                    });
-                  },
-                  child: Icon(
-                    Icons.bookmark_add,
-                    color: bookmarkColor,
-                  ),
-                ),
+                SizedBox(height: 16.0),
+                // CustomButton(
+                //   text: "Edit Profile",
+                //   onPressed: () {
+                //     GoRouter.of(context).go('/profile/editProfile');
+                //   },
+                //   textColor: Colors.black,
+                //   backgroundGradient: const [
+                //     Colors.white,
+                //     Colors.white,
+                //   ],
+                //   width: 150,
+                // ),
+
               ],
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            Expanded(
-              child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: showPost
-                      ? 3
-                      : showBookmark
-                          ? 3
-                              : showPostJournal
-                                  ? 2
-                                      : pendingImages.length,
+          ),
+          const Divider(
+            height: 1.0,
+            color: Colors.grey,
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    showPost = true;
+                    showPostJournal = false;
+                    showBookmark = false;
+                    postIconColor = Colors.blue;
+                    postJournalIconColor = Colors.grey;
+                    bookmarkColor = Colors.grey;
+                  });
+                },
+                child: Icon(
+                  Icons.photo_library,
+                  color: postIconColor,
                 ),
-                itemCount:showPost
-                        ? postImages.length
-                        : showPostJournal
-                            ? cardData.length: postImages.length,
-                itemBuilder: (BuildContext context, int index) {
-                  if (showPendingImages) {
-                    // Render pending images
+              ),
+              
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    showBookmark = false;
+                    showPost = false;
+                    showPostJournal = true;
+                    postIconColor = Colors.grey;
+                    postJournalIconColor = Colors.blue;
+                    bookmarkColor = Colors.grey;
+                  });
+                },
+                child: Icon(
+                  Icons.article_outlined,
+                  color: postJournalIconColor,
+                ),
+              ),
+              
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    showBookmark = true;
+                    showPost = false;
+                    showPostJournal = false;
+                    postIconColor = Colors.grey;
+                    postJournalIconColor = Colors.grey;
+                    bookmarkColor = Colors.blue;
+                  });
+                },
+                child: Icon(
+                  Icons.bookmark_add,
+                  color: bookmarkColor,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Expanded(
+            child: GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: showPost
+                    ? 3
+                    : showBookmark
+                        ? 3
+                            : showPostJournal
+                                ? 2
+                                    : pendingImages.length,
+              ),
+              itemCount:showPost
+                      ? postImages.length
+                      : showPostJournal
+                          ? cardData.length: postImages.length,
+              itemBuilder: (BuildContext context, int index) {
+                if (showPendingImages) {
+                  // Render pending images
+                  return Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(pendingImages[index]),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  );
+                } else {
+                  // Check which icon is selected
+                  if (postIconColor == Colors.blue) {
+                    // Render post images
                     return Container(
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: AssetImage(pendingImages[index]),
+                          image: AssetImage(postImages[index]),
                           fit: BoxFit.cover,
                         ),
                       ),
                     );
+                  } else if (postJournalIconColor == Colors.blue) {
+                    // Render cardData
+                    final data = cardData[index];
+                    return _buildCard(
+                      image: data['image'],
+                      link: data['link'],
+                    );
+                  // } else if (pendingJournalIconColor == Colors.blue) {
+                  //   // Render cardData
+                  // //   final data = cardData[index];
+                  //   return _buildCard(
+                  //     image: data['image'],
+                  //     link: data['link'],
+                  //   );
                   } else {
-                    // Check which icon is selected
-                    if (postIconColor == Colors.blue) {
-                      // Render post images
-                      return Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage(postImages[index]),
-                            fit: BoxFit.cover,
-                          ),
+                    // Render post images
+                    return Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage(postImages[index]),
+                          fit: BoxFit.cover,
                         ),
-                      );
-                    } else if (postJournalIconColor == Colors.blue) {
-                      // Render cardData
-                      final data = cardData[index];
-                      return _buildCard(
-                        image: data['image'],
-                        link: data['link'],
-                      );
-                    // } else if (pendingJournalIconColor == Colors.blue) {
-                    //   // Render cardData
-                    // //   final data = cardData[index];
-                    //   return _buildCard(
-                    //     image: data['image'],
-                    //     link: data['link'],
-                    //   );
-                    } else {
-                      // Render post images
-                      return Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage(postImages[index]),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      );
-                    }
+                      ),
+                    );
                   }
-                },
-              ),
+                }
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -4,6 +4,7 @@ import 'package:x_tour/routes/route_constants.dart';
 import 'package:x_tour/screens/othersProfileScreen.dart';
 import '../screens/editProfileScreen.dart';
 import '../screens/screens.dart';
+import '../theme/xTour_theme.dart';
 
 final GlobalKey<NavigatorState> _rootNavigationKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 final GlobalKey<NavigatorState> _sectionNavigationKey =
@@ -149,6 +150,7 @@ class AppRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      theme: XTourTheme().dark(),
       routerConfig: _router,
     )
     ;

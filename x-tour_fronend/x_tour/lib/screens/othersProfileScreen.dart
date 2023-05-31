@@ -68,197 +68,194 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: ThemeData.dark(), // Set the theme to dark
-      child: Scaffold(
-        appBar: AppBar(
-          title: Center(child: Text('X-tour OtherProfile')),
-        ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  Stack(
-                    children: [
-                      const CircleAvatar(
-                        radius: 30.0,
-                        backgroundImage:
-                            NetworkImage(''), // Replace with actual image URL
-                        child: Icon(
-                          Icons.person,
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: CircleAvatar(
-                          radius: 12.0,
-                          backgroundColor:
-                              const Color.fromARGB(255, 33, 58, 243),
-                          child: IconButton(
-                            icon: const Icon(
-                              Icons.add,
-                              size: 14,
-                            ),
-                            color: Colors.white,
-                            onPressed: () {
-                              // Add image functionality
-                            },
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 16.0),
-                  const Text(
-                    'Username',
-                    style: TextStyle(
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 8.0),
-                  SizedBox(height: 16.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Column(
-                        children: [
-                          Text(
-                            '123', // Replace with actual post count
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(height: 4.0),
-                          Text(
-                            'Posts',
-                            style: TextStyle(
-                              fontSize: 16.0,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            '456K', // Replace with actual follower count
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(height: 4.0),
-                          Text(
-                            'Followers',
-                            style: TextStyle(
-                              fontSize: 16.0,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            '789', // Replace with actual following count
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(height: 4.0),
-                          Text(
-                            'Following',
-                            style: TextStyle(
-                              fontSize: 16.0,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 16.0),
-                ],
-              ),
-            ),
-            Divider(
-              height: 1.0,
-              color: Colors.grey,
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    return Scaffold(
+      appBar: AppBar(
+        title: Center(child: Text('X-tour OtherProfile')),
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Column(
               children: [
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      showPost = true;
-                      showPostJournal = false;
-                      postIconColor = Colors.blue;
-                      postJournalIconColor = Colors.grey;
-                    });
-                  },
-                  child: Icon(
-                    Icons.photo_library,
-                    color: postIconColor,
+                Stack(
+                  children: [
+                    const CircleAvatar(
+                      radius: 30.0,
+                      backgroundImage:
+                          NetworkImage(''), // Replace with actual image URL
+                      child: Icon(
+                        Icons.person,
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: CircleAvatar(
+                        radius: 12.0,
+                        backgroundColor:
+                            const Color.fromARGB(255, 33, 58, 243),
+                        child: IconButton(
+                          icon: const Icon(
+                            Icons.add,
+                            size: 14,
+                          ),
+                          color: Colors.white,
+                          onPressed: () {
+                            // Add image functionality
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 16.0),
+                const Text(
+                  'Username',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      showPost = false;
-                      showPostJournal = true;
-                      postIconColor = Colors.grey;
-                      postJournalIconColor = Colors.blue;
-                    });
-                  },
-                  child: Icon(
-                    Icons.playlist_add,
-                    color: postJournalIconColor,
-                  ),
+                SizedBox(height: 8.0),
+                SizedBox(height: 16.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Column(
+                      children: [
+                        Text(
+                          '123', // Replace with actual post count
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 4.0),
+                        Text(
+                          'Posts',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        Text(
+                          '456K', // Replace with actual follower count
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 4.0),
+                        Text(
+                          'Followers',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        Text(
+                          '789', // Replace with actual following count
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 4.0),
+                        Text(
+                          'Following',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
+                SizedBox(height: 16.0),
               ],
             ),
-            SizedBox(
-              height: 10,
-            ),
-            Expanded(
-              child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: showPost ? 3 : 2,
-                ),
-                itemCount: showPost ? postImages.length : cardData.length,
-                itemBuilder: (BuildContext context, int index) {
-                  if (postIconColor == Colors.blue) {
-                    // Render post images
-                    return Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage(postImages[index]),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    );
-                  } else if (postJournalIconColor == Colors.blue) {
-                    // Render cardData
-                    final data = cardData[index];
-                    return _buildCard(
-                      image: data['image'],
-                      link: data['link'],
-                    );
-                  }
-                  return Container();
+          ),
+          Divider(
+            height: 1.0,
+            color: Colors.grey,
+          ),
+          SizedBox(
+            height: 16,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    showPost = true;
+                    showPostJournal = false;
+                    postIconColor = Colors.blue;
+                    postJournalIconColor = Colors.grey;
+                  });
                 },
+                child: Icon(
+                  Icons.photo_library,
+                  color: postIconColor,
+                ),
               ),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    showPost = false;
+                    showPostJournal = true;
+                    postIconColor = Colors.grey;
+                    postJournalIconColor = Colors.blue;
+                  });
+                },
+                child: Icon(
+                  Icons.playlist_add,
+                  color: postJournalIconColor,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Expanded(
+            child: GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: showPost ? 3 : 2,
+              ),
+              itemCount: showPost ? postImages.length : cardData.length,
+              itemBuilder: (BuildContext context, int index) {
+                if (postIconColor == Colors.blue) {
+                  // Render post images
+                  return Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(postImages[index]),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  );
+                } else if (postJournalIconColor == Colors.blue) {
+                  // Render cardData
+                  final data = cardData[index];
+                  return _buildCard(
+                    image: data['image'],
+                    link: data['link'],
+                  );
+                }
+                return Container();
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -35,7 +35,7 @@ class HomeScreenState extends State<HomeScreen> {
   ) {
     final isSelected = index == _selectedIndex;
     final iconColor = isSelected ? const Color.fromARGB(255, 24,217,163) : Colors.grey;
-    final dotColor = isSelected ? Color.fromARGB(255, 24, 217, 163) : Colors.transparent;
+    final dotColor = isSelected ? const Color.fromARGB(255, 24, 217, 163) : Colors.transparent;
 
     return GestureDetector(
       onTap: () => _onTap(context, index),
@@ -70,40 +70,37 @@ class HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: ThemeData.dark(),
-      child: Scaffold(
-        body: widget.navigationShell,
-        bottomNavigationBar: Container(
-          height: 80,
-          decoration: BoxDecoration(
-            color: Colors.black,
-            borderRadius: BorderRadius.vertical(
-              top: Radius.circular(10.0),
+    return Scaffold(
+      body: widget.navigationShell,
+      bottomNavigationBar: Container(
+        height: 80,
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardColor,
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(10.0),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _buildBottomNavigationItem(
+              0,
+              Icons.home
+              
             ),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _buildBottomNavigationItem(
-                0,
-                Icons.home
-                
-              ),
-              _buildBottomNavigationItem(
-                1,
-                Icons.search
-              ),
-              _buildBottomNavigationItem(
-                2,
-                Icons.article_outlined
-              ),
-              _buildBottomNavigationItem(
-                3,
-                Icons.account_circle
-              ),
-            ],
-          ),
+            _buildBottomNavigationItem(
+              1,
+              Icons.search
+            ),
+            _buildBottomNavigationItem(
+              2,
+              Icons.article_outlined
+            ),
+            _buildBottomNavigationItem(
+              3,
+              Icons.account_circle
+            ),
+          ],
         ),
       ),
     );
