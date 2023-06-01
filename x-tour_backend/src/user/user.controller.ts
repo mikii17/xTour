@@ -39,13 +39,24 @@ export class UserController {
     const id=user['id'];
     return await this.userService.getUser({_id : id });
   }
-
+  @UseGuards(AuthGuard('jwt'))
+  @Get('/followers/:id')
+  async getUserFollowers(@Param("id") id): Promise<User[]> {
+    return this.userService.getUserFollowers(id);
+  }
   @UseGuards(AuthGuard('jwt'))
   @Get('/followers')
   async getUserFollowers(@Req() req: Request,@Query() query): Promise<User[]> {
     const user = req.user;
-    return this.userService.getUserFollowers(user['id'], );
+    return this.userService.getUserFollowers(user['id']);
   }
+  
+  @UseGuards(AuthGuard('jwt'))
+  @Get('/posts/:id')
+  async getposts(@Param("id") id): Promise<PostModel[]> {
+    return this.userService.getPosts(id);
+  }
+  
   @UseGuards(AuthGuard('jwt'))
   @Get('/posts')
   async getposts(@Req() req: Request): Promise<PostModel[]> {
@@ -66,6 +77,12 @@ export class UserController {
     const user = req.user;
     return this.userService.getPenddingPosts(user['id']);
   }
+  
+  @UseGuards(AuthGuard('jwt'))
+  @Get('/journals/:id')
+  async getjournal(@Param("id") id): Promise<Journal[]> {
+    return this.userService.getJournals(id);
+  }
 
   @UseGuards(AuthGuard('jwt'))
   @Get('/journals')
@@ -79,6 +96,12 @@ export class UserController {
   async getPenndingJournals(@Req() req: Request): Promise<Journal[]> {
     const user = req.user;
     return this.userService.getPenddingJournal(user['id']);
+  }
+  
+  @UseGuards(AuthGuard('jwt'))
+  @Get('/followings/:id')
+  async getUserFollowing(@Param("id") id): Promise<User[]> {
+    return this.userService.getUserFollowing(id);
   }
 
   @UseGuards(AuthGuard('jwt'))
