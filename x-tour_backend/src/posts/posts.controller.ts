@@ -22,10 +22,18 @@ export class PostsController {
     return posts
   }
 
+
   @UseGuards(AuthGuard('jwt'))
   @Get('/homepage')
-  HomePagePost(@Query() query: QueryPostDto, @Req() req){
-    return this.postsService.findhomepagePost(query, req.user['id']);
+  async homePagePost(@Query() query: QueryPostDto, @Req() req){
+    return await this.postsService.findhomepagePost(query, req.user['id']);
+  }
+
+  
+  @UseGuards(AuthGuard('jwt'))
+  @Get('/:id')
+  async getPost(@Param("id") id: String){
+    return await this.postsService.getApproved(id);
   }
 
   @Get()
@@ -33,6 +41,7 @@ export class PostsController {
     const posts = await this.postsService.findAllAproved(query);
     return posts
   }
+
 
   @UseGuards(AuthGuard('jwt'))
   @Post('/pending')

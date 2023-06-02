@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:x_tour/routes/route_constants.dart';
-import 'package:x_tour/screens/journalListScreen.dart';
-import '../screens/screens.dart';
+import 'package:x_tour/screens/error_page.dart';
+import 'package:x_tour/screens/splash_page.dart';
+import 'package:x_tour/user/auth/bloc/auth_bloc.dart';
+import 'package:x_tour/user/bloc/user_bloc.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -19,6 +21,12 @@ class HomeScreen extends StatefulWidget {
 class HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
+  @override
+  void initState() {
+    print("homwaw");
+    super.initState();
+  }
+
   void _onTap(BuildContext context, int index) {
     setState(() {
       _selectedIndex = index;
@@ -34,8 +42,11 @@ class HomeScreenState extends State<HomeScreen> {
     IconData iconData,
   ) {
     final isSelected = index == _selectedIndex;
-    final iconColor = isSelected ? const Color.fromARGB(255, 24,217,163) : Colors.grey;
-    final dotColor = isSelected ? const Color.fromARGB(255, 24, 217, 163) : Colors.transparent;
+    final iconColor =
+        isSelected ? const Color.fromARGB(255, 24, 217, 163) : Colors.grey;
+    final dotColor = isSelected
+        ? const Color.fromARGB(255, 24, 217, 163)
+        : Colors.transparent;
 
     return GestureDetector(
       onTap: () => _onTap(context, index),
@@ -43,7 +54,6 @@ class HomeScreenState extends State<HomeScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Column(
-      
             children: [
               Icon(
                 iconData,
@@ -62,7 +72,6 @@ class HomeScreenState extends State<HomeScreen> {
                 ),
             ],
           ),
-          
         ],
       ),
     );
@@ -70,39 +79,52 @@ class HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: widget.navigationShell,
-      bottomNavigationBar: Container(
-        height: 80,
-        decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(10.0),
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            _buildBottomNavigationItem(
-              0,
-              Icons.home
-              
-            ),
-            _buildBottomNavigationItem(
-              1,
-              Icons.search
-            ),
-            _buildBottomNavigationItem(
-              2,
-              Icons.article_outlined
-            ),
-            _buildBottomNavigationItem(
-              3,
-              Icons.account_circle
-            ),
-          ],
-        ),
-      ),
+    return BlocConsumer<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is AuthAuthenticated) {
+          context.read<UserBloc>().add(LoadUser());
+        }
+      },
+      builder: (context, state) {
+        if (state is AuthInitializing || state is AuthUninitialized) {
+          return SplashPage();
+        }
+        return BlocBuilder<UserBloc, UserState>(
+          builder: (context, state) {
+            if (state is UserLoading || state is UserInitial) {
+              return SplashPage();
+            }
+            if (state is UserOperationFailure) {
+              return ErrorPage();
+            }
+            if (state is UserOperationSuccess) {
+              return Scaffold(
+                body: widget.navigationShell,
+                bottomNavigationBar: Container(
+                  height: 80,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).cardColor,
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(10.0),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      _buildBottomNavigationItem(0, Icons.home),
+                      _buildBottomNavigationItem(1, Icons.search),
+                      _buildBottomNavigationItem(2, Icons.article_outlined),
+                      _buildBottomNavigationItem(3, Icons.account_circle),
+                    ],
+                  ),
+                ),
+              );
+            }
+            print("herer2");
+            return ErrorPage();
+          },
+        );
+      },
     );
   }
 }

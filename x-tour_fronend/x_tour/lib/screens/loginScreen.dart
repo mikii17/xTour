@@ -1,14 +1,25 @@
 import 'package:flutter/material.dart';
-import '../custom/custom_button.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:x_tour/custom/custom.dart';
+import 'package:x_tour/theme/xTour_theme.dart';
+import 'package:x_tour/user/login/bloc/login_bloc.dart';
 
-class Login extends StatefulWidget {
-  const Login({Key? key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({Key? key});
 
   @override
-  _LoginState createState() => _LoginState();
+  _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _LoginState extends State<Login> {
+class _LoginScreenState extends State<LoginScreen> {
+  late LoginBloc loginBloc;
+  @override
+  void initState() {
+    super.initState();
+    loginBloc = context.read<LoginBloc>();
+  }
+
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -34,9 +45,9 @@ class _LoginState extends State<Login> {
       // Perform login logic
       final username = _usernameController.text;
       final password = _passwordController.text;
+      print(password);
 
-      // Do something with the form values
-      // ...
+      loginBloc.add(Login(username: username, password: password));
     }
   }
 
@@ -51,12 +62,8 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "mytrial",
+      theme: XTourTheme().dark(),
       home: Scaffold(
-        appBar: AppBar(
-          title: const Center(
-            child: Text("X-tour"),
-          ),
-        ),
         body: SingleChildScrollView(
           child: Center(
             child: Form(
@@ -64,7 +71,7 @@ class _LoginState extends State<Login> {
               child: Column(
                 children: [
                   const SizedBox(
-                    height: 70,
+                    height: 50,
                   ),
                   Container(
                     margin: const EdgeInsets.only(left: 20),
@@ -86,49 +93,42 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                   const SizedBox(
-                    height: 70,
+                    height: 30,
                   ),
-                  TextFormField(
-                    controller: _usernameController,
-                    decoration: InputDecoration(
-                      labelText: 'Username',
-                      prefixIcon: const Icon(Icons.person),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
+                  Container(
+                    margin: EdgeInsets.only(left: 20, right: 20),
+                    child: TextFormField(
+                      controller: _usernameController,
+                      decoration: InputDecoration(
+                        labelText: 'Username',
+                        prefixIcon: const Icon(Icons.person),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
                       ),
+                      validator: _validateUsername,
                     ),
-                    validator: _validateUsername,
                   ),
                   const SizedBox(
                     height: 30,
                   ),
-                  TextFormField(
-                    controller: _passwordController,
-                    decoration: InputDecoration(
-                      labelText: 'Password',
-                      prefixIcon: const Icon(Icons.lock),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                    ),
-                    obscureText: true,
-                    validator: _validatePassword,
-                  ),
                   Container(
-                    margin: const EdgeInsets.only(left: 185),
-                    child: GestureDetector(
-                      onTap: () {},
-                      child: const Text(
-                        'forgot password?',
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Color.fromARGB(255, 12, 77, 198),
+                    margin: EdgeInsets.only(left: 20, right: 20),
+                    child: TextFormField(
+                      controller: _passwordController,
+                      decoration: InputDecoration(
+                        labelText: 'Password',
+                        prefixIcon: const Icon(Icons.lock),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
                         ),
                       ),
+                      obscureText: true,
+                      validator: _validatePassword,
                     ),
                   ),
                   const SizedBox(
-                    height: 75,
+                    height: 40,
                   ),
                   ElevatedButton(
                     onPressed: _login,
@@ -140,13 +140,17 @@ class _LoginState extends State<Login> {
                       ),
                       minimumSize: const Size(250, 40),
                     ),
-                    child: const Text('login'),
+                    child: loginBloc.state is LoginLoading
+                        ? const CircularProgressIndicator()
+                        : const Text('login'),
                   ),
                   const SizedBox(
                     height: 20,
                   ),
                   CustomButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      GoRouter.of(context).go("/signup");
+                    },
                     text: 'Signup',
                     backgroundGradient: const [
                       Colors.white,

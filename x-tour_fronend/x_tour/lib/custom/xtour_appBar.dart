@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../posts/screens/createPostScreen.dart';
 import '../screens/screens.dart';
 
 class XTourAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -10,7 +11,7 @@ class XTourAppBar extends StatelessWidget implements PreferredSizeWidget {
     Key? key,
     required this.title,
     this.leading,
-    this.showActionIcon ,
+    this.showActionIcon,
   }) : super(key: key);
 
   @override
@@ -51,34 +52,34 @@ class XTourAppBar extends StatelessWidget implements PreferredSizeWidget {
                       ),
                     ),
                 showActionIcon ??
-                  Transform.translate(
-                    offset: const Offset(10, 0),
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CreatePostPage(),
-                          ),
-                        );
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Container(
-                          height: 40,
-                          width: 40,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.white,
-                          ),
-                          child: const Icon(
-                            Icons.add,
-                            color: Colors.black,
+                    Transform.translate(
+                      offset: const Offset(10, 0),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CreatePostPage(),
+                            ),
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Container(
+                            height: 40,
+                            width: 40,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.white,
+                            ),
+                            child: const Icon(
+                              Icons.add,
+                              color: Colors.black,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
               ],
             ),
           ],

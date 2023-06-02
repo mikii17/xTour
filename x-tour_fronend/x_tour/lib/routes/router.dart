@@ -1,92 +1,159 @@
+import 'dart:async';
+
+import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:x_tour/routes/route_constants.dart';
-import 'package:x_tour/screens/othersProfileScreen.dart';
-import '../screens/editProfileScreen.dart';
+import 'package:x_tour/user/screens/othersProfileScreen.dart';
+import 'package:x_tour/user/auth/bloc/auth_bloc.dart';
+import '../journal/screens/journalListScreen.dart';
+import '../journal/screens/pendingJournalListScreen.dart';
+import '../journal/screens/webViewScreen.dart';
+import '../posts/screens/editPendingPostScreen.dart';
+import '../posts/screens/pendingPostListScreen.dart';
+import '../posts/screens/postDetail.dart';
+import '../posts/screens/postListScreen.dart';
+import '../posts/screens/searchScreen.dart';
+import '../user/screens/editProfileScreen.dart';
+import '../user/screens/profileScreen.dart';
 import '../screens/screens.dart';
 import '../theme/xTour_theme.dart';
 
-final GlobalKey<NavigatorState> _rootNavigationKey = GlobalKey<NavigatorState>(debugLabel: 'root');
+final GlobalKey<NavigatorState> _rootNavigationKey =
+    GlobalKey<NavigatorState>(debugLabel: 'root');
 final GlobalKey<NavigatorState> _sectionNavigationKey =
     GlobalKey<NavigatorState>(debugLabel: 'sectionKey');
 
 class AppRoute extends StatelessWidget {
-  AppRoute({super.key});
+  final AuthBloc authBloc;
 
-  final GoRouter _router = GoRouter(
+  AppRoute({super.key, required this.authBloc});
+
+  // ignore: prefer_final_fields
+  late GoRouter _router = GoRouter(
     navigatorKey: _rootNavigationKey,
     initialLocation: '/',
     routes: <RouteBase>[
       StatefulShellRoute.indexedStack(
-        builder: (context, state, navigationShell) {
-          return HomeScreen(navigationShell: navigationShell);
-        } ,
-        branches: <StatefulShellBranch>[
-          StatefulShellBranch(
-            navigatorKey: _sectionNavigationKey,
-            routes: <RouteBase>[
-              GoRoute(
-                path: '/',
-                builder:(context, state) {
-                  return PostListScreen();
-                },
-
+          builder: (context, state, navigationShell) {
+            return HomeScreen(navigationShell: navigationShell);
+          },
+          branches: <StatefulShellBranch>[
+            StatefulShellBranch(
+                navigatorKey: _sectionNavigationKey,
                 routes: <RouteBase>[
                   GoRoute(
-                    path: 'othersProfile',
-                    builder: (context, state) {
-                      return OtherProfileScreen();
-                    },
-                  ),
-                   GoRoute(
-                      path: 'comments',
+                      path: '/',
                       builder: (context, state) {
-                        return XtourCommentSection();
+                        return PostListScreen();
                       },
-                  ),
-                ]
-              )
-            ]
-          ),
-          StatefulShellBranch(
-            routes: <RouteBase>[
+                      routes: <RouteBase>[
+                        GoRoute(
+                            path: 'othersProfile/:id',
+                            builder: (context, state) {
+                              String id = state.pathParameters["id"]!;
+                              return OtherProfileScreen(
+                                id: id,
+                              );
+                            },
+                            routes: <RouteBase>[
+                              GoRoute(
+                                path: 'postDetail/:id',
+                                builder: (context, state) {
+                                  String id = state.pathParameters["id"]!;
+                                  return PostDetailScreen(id: id);
+                                },
+                              )
+                            ]),
+                        GoRoute(
+                          path: 'comments/:id',
+                          builder: (context, state) {
+                            String id = state.pathParameters["id"]!;
+                            return XtourCommentSection(id: id);
+                          },
+                        ),
+                        GoRoute(
+                          path: 'createPost',
+                          builder: (context, state) {
+                            return PostListScreen();
+                          },
+                        )
+                      ])
+                ]),
+            StatefulShellBranch(routes: <RouteBase>[
               GoRoute(
                   path: '/search',
                   builder: (context, state) {
                     return SearchScreen();
                   },
                   routes: <RouteBase>[
-                    // GoRoute(
-                    //   path: 'othersProfile',
-                    //   builder: (context, state) {
-                    //     return OtherProfileScreen();
-                    //   },
-                    // ),
-                    // GoRoute(
-                    //   path: 'comments',
-                    //   builder: (context, state) {
-                    //     return XtourCommentSection();
-                    //   },
-                    // ),
-              ])
-          ]),
-          StatefulShellBranch(routes: <RouteBase>[
-            GoRoute(
-              path: '/journal',
-              builder: (context, state) {
-                return JournalListScreen();
-              },
-              routes: <RouteBase>[
-                GoRoute(
-                  path: 'othersProfile',
+                    GoRoute(
+                        path: 'othersProfile/:id',
+                        builder: (context, state) {
+                          String id = state.pathParameters["id"]!;
+                          return OtherProfileScreen(
+                            id: id,
+                          );
+                        },
+                        routes: <RouteBase>[
+                          GoRoute(
+                            path: 'postDetail/:id',
+                            builder: (context, state) {
+                              String id = state.pathParameters["id"]!;
+                              return PostDetailScreen(id: id);
+                            },
+                          )
+                        ]),
+                    GoRoute(
+                      path: 'postDetail/:id',
+                      builder: (context, state) {
+                        String id = state.pathParameters["id"]!;
+                        return PostDetailScreen(id: id);
+                      },
+                    )
+                  ])
+            ]),
+            StatefulShellBranch(routes: <RouteBase>[
+              GoRoute(
+                  path: '/journal',
                   builder: (context, state) {
-                    return OtherProfileScreen();
+                    return JournalListScreen();
                   },
-                ),
-              ])
-          ]),
-          StatefulShellBranch(
-            routes: <RouteBase>[
+                  routes: <RouteBase>[
+                    GoRoute(
+                        path: 'othersProfile/:id',
+                        builder: (context, state) {
+                          String id = state.pathParameters["id"]!;
+                          return OtherProfileScreen(
+                            id: id,
+                          );
+                        },
+                        routes: <RouteBase>[
+                          GoRoute(
+                            path: 'postDetail/:id',
+                            builder: (context, state) {
+                              String id = state.pathParameters["id"]!;
+                              return PostDetailScreen(id: id);
+                            },
+                          )
+                        ]),
+                    GoRoute(
+                      path: 'createJournal',
+                      builder: (context, state) {
+                        return PostListScreen();
+                      },
+                    ),
+                    GoRoute(
+                      path: 'webview',
+                      builder: (context, state) {
+                        var query = state.queryParameters;
+                        String title = query['link']!;
+                        return WebViewScreen(title: title);
+                      },
+                    )
+                  ])
+            ]),
+            StatefulShellBranch(routes: <RouteBase>[
               GoRoute(
                   path: '/profile',
                   builder: (context, state) {
@@ -100,60 +167,112 @@ class AppRoute extends StatelessWidget {
                       },
                     ),
                     GoRoute(
-                      path: 'editPendingPost',
-                      builder: (context, state) {
-                        return EditPendingPostScreen();
-                      },
-                    ),
+                        path: 'pendingPost',
+                        builder: (context, state) {
+                          return PendingPostListScreen();
+                        },
+                        routes: <RouteBase>[
+                          GoRoute(
+                            path: 'editPendingPost/:id',
+                            builder: (context, state) {
+                              String id = state.pathParameters["id"]!;
+                              return EditPendingPostScreen(id: id);
+                            },
+                          ),
+                        ]),
                     GoRoute(
-                        path: 'editPendingJournal',
+                        path: 'pendingJournal',
                         builder: (context, state) {
-                          return EditPendingJournalScreen();
+                          return PendingJournalListScreen();
                         },
-                      ),
+                        routes: <RouteBase>[
+                          GoRoute(
+                            path: 'editPendingJournal/:id',
+                            builder: (context, state) {
+                              String id = state.pathParameters["id"]!;
+                              return EditPendingJournalScreen(
+                                id: id,
+                              );
+                            },
+                          ),
+                        ]),
                     GoRoute(
-                        path: 'follower',
+                        path: 'othersProfile/:id',
                         builder: (context, state) {
-                          return FollowerScreen();
+                          String id = state.pathParameters["id"]!;
+                          return OtherProfileScreen(
+                            id: id,
+                          );
                         },
-                      ),
-                      GoRoute(
-                        path: 'following',
-                        builder: (context, state) {
-                          return FollowingScreen();
-                        },
-                      )
+                        routes: <RouteBase>[
+                          GoRoute(
+                            path: 'postDetail/:id',
+                            builder: (context, state) {
+                              String id = state.pathParameters["id"]!;
+                              return PostDetailScreen(id: id);
+                            },
+                          )
+                        ]),
                   ])
             ]),
-            
-              StatefulShellBranch(routes: <RouteBase>[
-                GoRoute(
-                  path: '/createPost',
-                  builder: (context, state) {
-                    return PostListScreen();
-                  },
-                )
-              ]),
-              StatefulShellBranch(routes: <RouteBase>[
-                GoRoute(
-                  path: '/createJournal',
-                  builder: (context, state) {
-                    return PostListScreen();
-                  },
-                )
-              ]),
-        ]
-        )
-    ]
+          ]),
+      GoRoute(
+        path: '/signup',
+        builder: (context, state) {
+          return const Signup();
+        },
+      ),
+      GoRoute(
+        path: '/login',
+        builder: (context, state) {
+          return const LoginScreen();
+        },
+      )
+    ],
+    // ignore: body_might_complete_normally_nullable
+    redirect: (BuildContext context, GoRouterState state) {
+      final bool loggedIn = authBloc.state is AuthAuthenticated;
+      final bool initializing = authBloc.state is AuthInitializing;
+
+      final bool loggingIn =
+          state.location == '/login' || state.location == "/signup";
+
+      if (!loggedIn) {
+        return loggingIn
+            ? null
+            : initializing
+                ? null
+                : "/login";
+      }
+      if (loggingIn) {
+        return "/";
+      }
+      return null;
+    },
+    refreshListenable: GoRouterRefreshStream(authBloc.stream),
   );
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      theme: XTourTheme().dark(),
+      theme: XTourTheme().light(),
+      darkTheme: XTourTheme().dark(),
+      themeMode: EasyDynamicTheme.of(context).themeMode,
       routerConfig: _router,
-    )
-    ;
+    );
   }
 }
 
+class GoRouterRefreshStream extends ChangeNotifier {
+  late final StreamSubscription<dynamic> _subscription;
+  GoRouterRefreshStream(Stream<dynamic> stream) {
+    notifyListeners();
+    _subscription = stream.asBroadcastStream().listen((_) => notifyListeners());
+  }
+
+  @override
+  void dispose() {
+    _subscription.cancel();
+    super.dispose();
+  }
+}

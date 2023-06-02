@@ -37,13 +37,12 @@ export class PostsService {
   //   return newPost;
   // }
   async insertImages(Model: any, images: Array<any>, id: string) {
-    const createdPost = await Model.findById({ _id: id });
-    createdPost.images = images;
-    return await createdPost.save().populate([{path: "comment", perDocumentLimit: 3}, "creatorId"]);
+    const createdPost = await Model.findByIdAndUpdate({ _id: id }, {images: images}).populate([{path: "comments", perDocumentLimit: 3}, "creatorId"]);
+    return createdPost;
   }
 
   async findAll(Model: any) {
-    const posts = await Model.find().populate([{path: "comment", perDocumentLimit: 3}, "creatorId"]);
+    const posts = await Model.find().populate([{path: "comments", perDocumentLimit: 3}, "creatorId"]);
     return posts as Post[];
   }
 
@@ -71,11 +70,11 @@ export class PostsService {
   }
 
   async like(postId: string, userId: string) {
-    return await this.postModel.findByIdAndUpdate(postId,{$addToSet: {likes: userId}},{returnOriginal: false}).populate([{path: "comment", perDocumentLimit: 3}, "creatorId"]);
+    return await this.postModel.findByIdAndUpdate(postId,{$addToSet: {likes: userId}},{returnOriginal: false}).populate([{path: "comments", perDocumentLimit: 3}, "creatorId"]);
   }
 
   async unlike(postId: string , userId: string){
-    return await this.postModel.findByIdAndUpdate(postId,{$pull: {likes: userId}},{returnOriginal: false}).populate([{path: "comment", perDocumentLimit: 3}, "creatorId"]);
+    return await this.postModel.findByIdAndUpdate(postId,{$pull: {likes: userId}},{returnOriginal: false}).populate([{path: "comments", perDocumentLimit: 3}, "creatorId"]);
   }
   
   async update(Model: any, id: string, story: string, description: string) {
@@ -86,7 +85,7 @@ export class PostsService {
     if (description) {
       updatedproduct.description = description;
     }
-    const result = await updatedproduct.save().populate([{path: "comment", perDocumentLimit: 3}, "creatorId"]);
+    const result = await updatedproduct.save().populate([{path: "comments", perDocumentLimit: 3}, "creatorId"]);
 
     return result;
   }
@@ -102,7 +101,9 @@ export class PostsService {
 
   //----------------------------------------------------------------
   /// operations for the Aproved Posts
-
+  async getApproved(id: String): Promise<Post>{
+    return await this.postModel.findById(id);
+  }
   async createAproved(createPost, id: string): Promise<Post> {
     await this.PendingpostModel.findByIdAndDelete(id);
     await this.userService.removePenddingposts(createPost.creatorId, id);
@@ -112,7 +113,7 @@ export class PostsService {
   }
 
   async comments(commenteId: string ,postId){
-    await this.postModel.findByIdAndUpdate(postId,{$addToSet: {comments: commenteId}}).populate([{path: "comment", perDocumentLimit: 3}, "creatorId"]);
+    await this.postModel.findByIdAndUpdate(postId,{$addToSet: {comments: commenteId}}).populate([{path: "comments", perDocumentLimit: 3}, "creatorId"]);
   }
 
   async InsertAprovedimages(images: Array<any>, id: string) {
@@ -151,6 +152,7 @@ export class PostsService {
     const newPost = await this.PendingpostModel.create({
       ...createPost,
       creatorId: id,
+      images: []
     });
     await this.userService.penddingposts(id, newPost.id);
     return newPost;
