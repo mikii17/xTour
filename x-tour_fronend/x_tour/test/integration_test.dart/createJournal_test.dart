@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:x_tour/screens/createJournalScreen.dart';
+import 'package:x_tour/journal/screens/create_journalScreen.dart';
 
 void main() {
   group('CreateJournalScreen', () {

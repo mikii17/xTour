@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:x_tour/screens/othersProfileScreen.dart';
+import 'package:x_tour/user/screens/othersProfileScreen.dart';
 
 void main() {
   testWidgets('OtherProfileScreen Widget Test', (WidgetTester tester) async {
     // Build the OtherProfileScreen widget
-    await tester.pumpWidget(MaterialApp(home: OtherProfileScreen()));
+    await tester.pumpWidget(MaterialApp(home: OtherProfileScreen(id: 'a1234',)));
 
     // Find the avatar
     final avatarFinder = find.byKey(Key("circularAvator"));

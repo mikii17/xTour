@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:x_tour/screens/searchScreen.dart';
+import 'package:x_tour/posts/screens/searchScreen.dart';
 
 void main() {
   testWidgets('SearchScreen widget test', (WidgetTester tester) async {

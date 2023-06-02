@@ -8,7 +8,7 @@ void main() {
   group('Login', () {
     testWidgets('should display the title and login button',
         (WidgetTester tester) async {
-      await tester.pumpWidget(MaterialApp(home: Login()));
+      await tester.pumpWidget(MaterialApp(home: LoginScreen()));
 
       expect(find.text('X-tour'), findsOneWidget);
 
@@ -17,7 +17,7 @@ void main() {
 
     testWidgets('should validate empty username field on login button tap',
         (WidgetTester tester) async {
-      await tester.pumpWidget(MaterialApp(home: Login()));
+      await tester.pumpWidget(MaterialApp(home: LoginScreen()));
 
       await tester.tap(find.text('login'));
       await tester.pump();
@@ -28,7 +28,7 @@ void main() {
 
     testWidgets('should validate empty password field on login button tap',
         (WidgetTester tester) async {
-      await tester.pumpWidget(MaterialApp(home: Login()));
+      await tester.pumpWidget(MaterialApp(home: LoginScreen()));
 
 
       await tester.enterText(find.byKey(Key('usernameField')), 'testuser');
@@ -44,7 +44,7 @@ void main() {
 
     testWidgets('should validate password length on login button tap',
         (WidgetTester tester) async {
-      await tester.pumpWidget(MaterialApp(home: Login()));
+      await tester.pumpWidget(MaterialApp(home: LoginScreen()));
 
       
       await tester.enterText(find.byKey(Key('usernameField')), 'testuser');

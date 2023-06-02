@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:x_tour/custom/xtour_appBar.dart';
 import 'package:x_tour/screens/screens.dart';
+import 'package:x_tour/user/screens/profileScreen.dart';
 
 
 

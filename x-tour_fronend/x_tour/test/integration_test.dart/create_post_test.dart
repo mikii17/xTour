@@ -4,14 +4,15 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
-import 'package:x_tour/screens/createPostScreen.dart';
+
 import 'package:x_tour/screens/homeScreen.dart';
+import 'package:x_tour/posts/screens/createPostScreen.dart';
 
 void main() {
   testWidgets('Create Post integration test', (WidgetTester tester) async {
     // Build the create post screen
     await tester.pumpWidget(MaterialApp(
-      home: CreatePostScreen(),
+      home: CreatePostPage(),
     ));
 
     // Insert text in title, description, and story fields

@@ -2,12 +2,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
 import 'package:x_tour/screens/homeScreen.dart';
 import 'package:x_tour/screens/loginScreen.dart';
+import 'package:x_tour/user/login/bloc/login_bloc.dart';
 
 
 void main() {
   testWidgets('Authentication succed and navigation to home screen', (WidgetTester tester) async {
     // Build the login screen
-    await tester.pumpWidget(Login());
+    await tester.pumpWidget(LoginScreen());
 
     // Enter the username and password
     final usernameField = find.byKey(Key('usernameField'));
@@ -28,7 +29,7 @@ void main() {
 
   testWidgets('Authentication not succed test (username or password error)', (WidgetTester tester) async {
     // Build the login screen
-    await tester.pumpWidget(Login());
+    await tester.pumpWidget(LoginScreen());
 
     // Enter the username and password
     final usernameField = find.byKey(Key('usernameField'));

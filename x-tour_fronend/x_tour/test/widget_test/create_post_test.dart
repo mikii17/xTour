@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:x_tour/screens/createPostScreen.dart';
+import 'package:x_tour/posts/screens/createPostScreen.dart';
+import 'package:x_tour/screens/screens.dart';
 
 void main() {
   group('CreatePostPage', () {
